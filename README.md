@@ -1,0 +1,94 @@
+medicitas-frontend
+├── src
+│   ├── app
+│   │   ├── core
+│   │   │   ├── guards
+│   │   │   │   ├── auth.guard.ts
+│   │   │   │   └── no-auth.guard.ts
+│   │   │   ├── interceptors
+│   │   │   │   └── error.interceptor.ts
+│   │   │   ├── models
+│   │   │   │   ├── auth-response.model.ts
+│   │   │   │   ├── cita-detalle.dto.ts
+│   │   │   │   ├── cita.model.ts
+│   │   │   │   ├── login-request.model.ts
+│   │   │   │   ├── medico.model.ts
+│   │   │   │   ├── notificacion.model.ts
+│   │   │   │   ├── paciente.model.ts
+│   │   │   │   ├── register-request.model.ts
+│   │   │   │   ├── reporte-activos.dto.ts
+│   │   │   │   ├── reporte-citas-estado.dto.ts
+│   │   │   │   └── reporte-general.dto.ts
+│   │   │   └── services
+│   │   │       └── token.service.ts
+│   │   ├── features
+│   │   │   ├── auth
+│   │   │   │   ├── login
+│   │   │   │   │   ├── login.component.html
+│   │   │   │   │   ├── login.component.scss
+│   │   │   │   │   └── login.component.ts
+│   │   │   │   ├── register
+│   │   │   │   │   ├── register.component.html
+│   │   │   │   │   └── register.component.ts
+│   │   │   │   ├── auth-routing.module.ts
+│   │   │   │   └── auth.module.ts
+│   │   │   ├── dashboard
+│   │   │   │   ├── dashboard-routing.module.ts
+│   │   │   │   ├── dashboard.component.html
+│   │   │   │   ├── dashboard.component.ts
+│   │   │   │   └── dashboard.module.ts
+│   │   │   └── patients
+│   │   │       ├── patient-form
+│   │   │       │   └── patient-form.component.ts
+│   │   │       ├── patient-list
+│   │   │       │   ├── patient-list.component.html
+│   │   │       │   └── patient-list.component.ts
+│   │   │       ├── patients-routing.module.ts
+│   │   │       └── patients.module.ts
+│   │   ├── services
+│   │   │   ├── appointment.service.ts
+│   │   │   ├── auth.service.ts
+│   │   │   ├── doctor.service.ts
+│   │   │   ├── notification.service.ts
+│   │   │   ├── patient.service.ts
+│   │   │   └── report.service.ts
+│   │   ├── shared
+│   │   │   └── components
+│   │   │       ├── confirm-dialog
+│   │   │       │   └── confirm-dialog.component.ts
+│   │   │       ├── header
+│   │   │       │   ├── header.component.html
+│   │   │       │   ├── header.component.scss
+│   │   │       │   └── header.component.ts
+│   │   │       ├── loading-spinner
+│   │   │       │   └── loading-spinner.component.ts
+│   │   │       ├── sidebar
+│   │   │       │   ├── sidebar.component.html
+│   │   │       │   ├── sidebar.component.scss
+│   │   │       │   └── sidebar.component.ts
+│   │   │       └── toast-notifications
+│   │   │           └── toast-notifications.component.ts
+│   │   ├── app-routing.module.ts
+│   │   ├── app.component.html
+│   │   ├── app.component.scss
+│   │   ├── app.component.ts
+│   │   └── app.module.ts
+│   ├── environments
+│   │   ├── environment.prod.ts
+│   │   └── environment.ts
+│   ├── index.html
+│   ├── main.ts
+│   └── styles.scss
+├── angular.json
+├── package.json
+└── tsconfig.json
+
+
+
+
+
+
+
+
+
+
