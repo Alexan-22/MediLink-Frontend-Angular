@@ -1,0 +1,150 @@
+.patient-form-container {
+  padding: 30px;
+}
+
+.page-header {
+  margin-bottom: 25px;
+}
+
+.page-header h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  margin-bottom: 5px;
+
+  color: #1f2937;
+}
+
+.page-header h2 i {
+  color: #2563eb;
+}
+
+.page-header p {
+  color: #6b7280;
+}
+
+.form-card {
+  background: white;
+
+  border-radius: 18px;
+
+  padding: 30px;
+
+  box-shadow:
+    0 4px 20px rgba(0,0,0,0.08);
+}
+
+.form-grid {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(auto-fit, minmax(300px, 1fr));
+
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+
+  margin-bottom: 8px;
+
+  font-weight: 600;
+
+  color: #374151;
+}
+
+.input-group {
+  position: relative;
+}
+
+.input-group i {
+
+  position: absolute;
+
+  left: 15px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  color: #6b7280;
+
+  z-index: 2;
+}
+
+.input-group input,
+.input-group select {
+
+  width: 100%;
+
+  padding: 12px 12px 12px 45px;
+
+  border: 1px solid #d1d5db;
+
+  border-radius: 10px;
+
+  font-size: 14px;
+
+  transition: all .3s ease;
+
+  box-sizing: border-box;
+}
+
+.input-group input:focus,
+.input-group select:focus {
+
+  outline: none;
+
+  border-color: #2563eb;
+
+  box-shadow:
+    0 0 0 4px rgba(37,99,235,0.15);
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+.button-group {
+
+  margin-top: 30px;
+
+  display: flex;
+
+  justify-content: flex-end;
+}
+
+.btn-primary {
+
+  border: none;
+
+  background: #2563eb;
+
+  color: white;
+
+  padding: 12px 24px;
+
+  border-radius: 10px;
+
+  cursor: pointer;
+
+  font-size: 15px;
+
+  font-weight: 600;
+
+  transition: all .3s ease;
+}
+
+.btn-primary:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+}
+
+.btn-primary i {
+  margin-right: 8px;
+}

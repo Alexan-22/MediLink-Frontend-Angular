@@ -1,0 +1,160 @@
+<div class="container-fluid mt-4" *ngIf="medico">
+
+  <div class="doctor-detail-card">
+
+    <div class="doctor-header">
+
+      <div class="avatar">
+
+        {{ medico.nombres.charAt(0) }}
+
+      </div>
+
+      <div>
+
+        <h2>
+
+          Dr. {{ medico.nombres }} {{ medico.apellidos }}
+
+        </h2>
+
+        <p>
+
+          {{ medico.especialidad }}
+
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="detail-grid">
+
+
+      <div class="detail-item">
+
+        <span>CMP</span>
+
+        <strong>
+
+          {{ medico.cmp }}
+
+        </strong>
+
+      </div>
+
+
+
+      <div class="detail-item">
+
+        <span>Teléfono</span>
+
+        <strong>
+
+          {{ medico.telefono }}
+
+        </strong>
+
+      </div>
+
+
+
+      <div class="detail-item">
+
+        <span>Email</span>
+
+        <strong>
+
+          {{ medico.email }}
+
+        </strong>
+
+      </div>
+
+
+
+      <div class="detail-item">
+
+        <span>Consultorio</span>
+
+        <strong>
+
+          {{ medico.consultorio }}
+
+        </strong>
+
+      </div>
+
+
+
+      <div class="detail-item">
+
+        <span>Horario</span>
+
+        <strong>
+
+          {{ medico.horarioInicio }}
+
+          -
+
+          {{ medico.horarioFin }}
+
+        </strong>
+
+      </div>
+
+
+
+      <div class="detail-item">
+
+        <span>Estado</span>
+
+
+        <span
+          class="badge"
+
+          [ngClass]="{
+
+          'badge-active':medico.estado=='ACTIVO',
+
+          'badge-inactive':medico.estado!='ACTIVO'
+
+          }">
+
+          {{ medico.estado }}
+
+        </span>
+
+
+      </div>
+
+    </div>
+
+
+
+    <div class="buttons">
+
+
+      <button
+
+        class="btn btn-secondary"
+
+        routerLink="/doctors">
+
+
+        <i class="bi bi-arrow-left"></i>
+
+        Volver
+
+
+      </button>
+
+
+    </div>
+
+
+  </div>
+
+
+</div>

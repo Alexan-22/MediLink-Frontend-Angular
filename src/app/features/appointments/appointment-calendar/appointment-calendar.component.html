@@ -1,0 +1,107 @@
+<div class="container-fluid mt-4">
+
+<div class="calendar-card">
+
+<div class="calendar-header">
+
+<h2>
+<i class="bi bi-calendar3"></i>
+Calendario de Citas
+</h2>
+
+<p>Agenda médica organizada por fecha</p>
+
+</div>
+
+
+<div *ngFor="let fecha of getFechas()" class="day-card">
+
+<div class="day-header">
+
+<i class="bi bi-calendar-event"></i>
+
+<span>{{fecha}}</span>
+
+</div>
+
+
+<div class="day-body">
+
+<div
+*ngFor="let cita of citasAgrupadas[fecha]"
+class="event-card">
+
+<div class="event-hour">
+
+<i class="bi bi-clock"></i>
+
+{{cita.hora}}
+
+</div>
+
+
+<div class="event-info">
+
+<h6>
+
+Paciente {{cita.pacienteId}}
+
+</h6>
+
+<small>
+
+Médico {{cita.medicoId}}
+
+</small>
+
+</div>
+
+
+<div>
+
+<span
+*ngIf="cita.estado=='PROGRAMADA'"
+class="badge bg-primary">
+
+PROGRAMADA
+
+</span>
+
+
+<span
+*ngIf="cita.estado=='ATENDIDA'"
+class="badge bg-success">
+
+ATENDIDA
+
+</span>
+
+
+<span
+*ngIf="cita.estado=='CANCELADA'"
+class="badge bg-danger">
+
+CANCELADA
+
+</span>
+
+
+<span
+*ngIf="cita.estado=='NO_ASISTIO'"
+class="badge bg-warning text-dark">
+
+NO ASISTIÓ
+
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>

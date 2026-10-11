@@ -1,0 +1,61 @@
+<div class="login-container">
+
+  <div class="login-card">
+
+    <div class="logo-section">
+      <i class="bi bi-heart-pulse-fill"></i>
+      <h2>Medicitas</h2>
+      <p>Sistema de Gestión Médica</p>
+    </div>
+
+    <form (ngSubmit)="onSubmit()">
+
+      <div class="form-group">
+        <label>Usuario</label>
+
+        <div class="input-group">
+          <i class="bi bi-person-fill"></i>
+          <input
+            type="text"
+            [(ngModel)]="loginData.username"
+            name="username"
+            placeholder="Ingrese su usuario"
+            required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Contraseña</label>
+
+        <div class="input-group">
+          <i class="bi bi-lock-fill"></i>
+          <input
+            type="password"
+            [(ngModel)]="loginData.password"
+            name="password"
+            placeholder="Ingrese su contraseña"
+            required>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-primary">
+        <i class="bi bi-box-arrow-in-right"></i>
+        Ingresar
+      </button>
+
+      <p class="error" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </p>
+
+      <p class="register-link">
+        ¿No tienes cuenta?
+        <a routerLink="/auth/register">
+          Regístrate aquí
+        </a>
+      </p>
+
+    </form>
+
+  </div>
+
+</div>

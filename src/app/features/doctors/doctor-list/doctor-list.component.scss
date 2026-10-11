@@ -1,0 +1,110 @@
+.doctor-card{
+    background:white;
+    padding:30px;
+    border-radius:18px;
+    box-shadow:0 4px 18px rgba(0,0,0,.08);
+}
+
+
+.header-section{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+
+.header-section h2{
+    font-size:28px;
+    font-weight:700;
+    color:#1f2937;
+}
+
+
+.header-section p{
+    margin:0;
+    color:#64748b;
+}
+
+
+.table tbody tr{
+    transition:.25s;
+}
+
+
+.table tbody tr:hover{
+    background:#f8fafc;
+}
+
+
+.doctor-cell{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+
+.avatar{
+
+    width:42px;
+    height:42px;
+
+    border-radius:50%;
+
+    background:#2563eb;
+
+    color:white;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-weight:700;
+
+}
+
+
+.actions{
+    display:flex;
+    gap:6px;
+}
+
+
+.btn-action{
+
+    width:36px;
+
+    height:36px;
+
+    padding:0;
+
+    border-radius:50%;
+
+}
+
+
+.badge{
+
+    padding:8px 12px;
+
+    font-size:12px;
+
+    font-weight:600;
+
+}
+
+
+.badge-active{
+
+    background:#16a34a;
+
+}
+
+
+.badge-inactive{
+
+    background:#dc2626;
+
+}

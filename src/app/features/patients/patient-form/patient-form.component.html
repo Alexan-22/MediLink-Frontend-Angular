@@ -1,0 +1,178 @@
+<div class="patient-form-container">
+
+  <div class="page-header">
+    <h2>
+      <i class="bi bi-person-plus-fill"></i>
+      {{ esEdicion ? 'Editar Paciente' : 'Nuevo Paciente' }}
+    </h2>
+
+    <p>
+      Complete la información del paciente
+    </p>
+  </div>
+
+  <div class="form-card">
+
+    <form (ngSubmit)="guardar()">
+
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label>DNI</label>
+          <div class="input-group">
+            <i class="bi bi-credit-card-2-front-fill"></i>
+            <input
+              type="text"
+              [(ngModel)]="paciente.dni"
+              name="dni"
+              required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Nombres</label>
+          <div class="input-group">
+            <i class="bi bi-person-fill"></i>
+            <input
+              type="text"
+              [(ngModel)]="paciente.nombres"
+              name="nombres"
+              required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Apellidos</label>
+          <div class="input-group">
+            <i class="bi bi-person-badge-fill"></i>
+            <input
+              type="text"
+              [(ngModel)]="paciente.apellidos"
+              name="apellidos"
+              required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Fecha Nacimiento</label>
+          <div class="input-group">
+            <i class="bi bi-calendar-event-fill"></i>
+            <input
+              type="date"
+              [(ngModel)]="paciente.fechaNacimiento"
+              name="fechaNacimiento">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Sexo</label>
+          <div class="input-group">
+            <i class="bi bi-gender-ambiguous"></i>
+            <select
+              [(ngModel)]="paciente.sexo"
+              name="sexo">
+
+              <option value="M">Masculino</option>
+              <option value="F">Femenino</option>
+
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Teléfono</label>
+          <div class="input-group">
+            <i class="bi bi-telephone-fill"></i>
+            <input
+              type="text"
+              [(ngModel)]="paciente.telefono"
+              name="telefono">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Email</label>
+          <div class="input-group">
+            <i class="bi bi-envelope-fill"></i>
+            <input
+              type="email"
+              [(ngModel)]="paciente.email"
+              name="email">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Dirección</label>
+          <div class="input-group">
+            <i class="bi bi-geo-alt-fill"></i>
+            <input
+              type="text"
+              [(ngModel)]="paciente.direccion"
+              name="direccion">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Tipo de Sangre</label>
+          <div class="input-group">
+            <i class="bi bi-droplet-fill"></i>
+            <input
+              type="text"
+              [(ngModel)]="paciente.tipoSangre"
+              name="tipoSangre">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Alergias</label>
+          <div class="input-group">
+            <i class="bi bi-shield-fill-exclamation"></i>
+            <input
+              type="text"
+              [(ngModel)]="paciente.alergias"
+              name="alergias">
+          </div>
+        </div>
+
+        <div class="form-group full-width">
+          <label>Estado</label>
+          <div class="input-group">
+            <i class="bi bi-check-circle-fill"></i>
+
+            <select
+              [(ngModel)]="paciente.estado"
+              name="estado">
+
+              <option value="ACTIVO">
+                ACTIVO
+              </option>
+
+              <option value="INACTIVO">
+                INACTIVO
+              </option>
+
+            </select>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="button-group">
+
+        <button
+          type="submit"
+          class="btn-primary">
+
+          <i class="bi bi-save-fill"></i>
+
+          {{ esEdicion ? 'Actualizar Paciente' : 'Guardar Paciente' }}
+
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>

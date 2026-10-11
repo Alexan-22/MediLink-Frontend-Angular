@@ -1,0 +1,108 @@
+<div class="patients-container">
+
+  <div class="page-header">
+
+    <div>
+      <h2>
+        <i class="bi bi-people-fill"></i>
+        Gestión de Pacientes
+      </h2>
+
+      <p>Administración de pacientes registrados</p>
+    </div>
+
+    <button
+      routerLink="/patients/new"
+      class="btn-primary">
+
+      <i class="bi bi-plus-circle-fill"></i>
+      Nuevo Paciente
+
+    </button>
+
+  </div>
+
+  <div class="table-card">
+
+    <table class="patients-table">
+
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>DNI</th>
+          <th>Nombres</th>
+          <th>Apellidos</th>
+          <th>Teléfono</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <tr *ngFor="let p of pacientes">
+
+          <td>{{ p.id }}</td>
+
+          <td>{{ p.dni }}</td>
+
+          <td>{{ p.nombres }}</td>
+
+          <td>{{ p.apellidos }}</td>
+
+          <td>{{ p.telefono }}</td>
+
+          <td>
+            <span
+              class="status-badge"
+              [ngClass]="{
+                'activo': p.estado === 'ACTIVO',
+                'inactivo': p.estado === 'INACTIVO'
+              }">
+
+              {{ p.estado }}
+
+            </span>
+          </td>
+
+          <td>
+
+            <div class="actions">
+
+              <button
+                (click)="verDetalle(p.id!)"
+                class="btn-view">
+
+                <i class="bi bi-eye-fill"></i>
+
+              </button>
+
+              <button
+                (click)="editar(p.id!)"
+                class="btn-edit">
+
+                <i class="bi bi-pencil-fill"></i>
+
+              </button>
+
+              <button
+                (click)="eliminar(p.id!)"
+                class="btn-delete">
+
+                <i class="bi bi-trash-fill"></i>
+
+              </button>
+
+            </div>
+
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>

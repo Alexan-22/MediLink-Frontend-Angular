@@ -1,0 +1,449 @@
+<div class="container-fluid mt-4">
+
+<div class="detail-card" *ngIf="detalle">
+
+<div class="header">
+
+<h2>
+<i class="bi bi-file-earmark-medical"></i>
+Detalle de Cita
+</h2>
+
+<p>
+Información de la atención médica
+</p>
+
+</div>
+
+
+<div class="row">
+
+
+<div class="col-md-6 mb-4">
+
+<div class="info-card">
+
+<span class="icon">
+
+<i class="bi bi-person"></i>
+
+</span>
+
+<div>
+
+<label>
+
+Paciente
+
+</label>
+
+<h5>
+
+{{detalle.paciente}}
+
+</h5>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<div class="col-md-6 mb-4">
+
+<div class="info-card">
+
+<span class="icon">
+
+<i class="bi bi-person-badge"></i>
+
+</span>
+
+<div>
+
+<label>
+
+Médico
+
+</label>
+
+<h5>
+
+{{detalle.medico}}
+
+</h5>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<div class="col-md-6 mb-4">
+
+<div class="info-card">
+
+<span class="icon">
+
+<i class="bi bi-heart-pulse"></i>
+
+</span>
+
+<div>
+
+<label>
+
+Especialidad
+
+</label>
+
+<h5>
+
+{{detalle.especialidad}}
+
+</h5>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<div class="col-md-3 mb-4">
+
+<div class="info-card">
+
+<span class="icon">
+
+<i class="bi bi-calendar-event"></i>
+
+</span>
+
+<div>
+
+<label>
+
+Fecha
+
+</label>
+
+<h5>
+
+{{detalle.fecha}}
+
+</h5>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<div class="col-md-3 mb-4">
+
+<div class="info-card">
+
+<span class="icon">
+
+<i class="bi bi-clock"></i>
+
+</span>
+
+<div>
+
+<label>
+
+Hora
+
+</label>
+
+<h5>
+
+{{detalle.hora}}
+
+</h5>
+
+</div>
+
+</div>
+
+</div>
+
+
+</div>
+
+
+
+<div class="status-section">
+
+<span
+*ngIf="detalle.estado=='PROGRAMADA'"
+class="badge bg-primary">
+
+PROGRAMADA
+
+</span>
+
+
+
+<span
+*ngIf="detalle.estado=='ATENDIDA'"
+class="badge bg-success">
+
+ATENDIDA
+
+</span>
+
+
+
+<span
+*ngIf="detalle.estado=='CANCELADA'"
+class="badge bg-danger">
+
+CANCELADA
+
+</span>
+
+
+
+<span
+*ngIf="detalle.estado=='NO_ASISTIO'"
+class="badge bg-warning text-dark">
+
+NO ASISTIÓ
+
+</span>
+
+</div>
+
+
+<hr>
+
+
+<div
+class="history-card"
+*ngIf="detalle.estado=='ATENDIDA'">
+
+
+<h5>
+
+<i class="bi bi-journal-medical"></i>
+
+Historial Clínico
+
+</h5>
+
+
+
+<div *ngIf="historia">
+
+
+<div class="mb-3">
+
+<label>
+
+Diagnóstico
+
+</label>
+
+<p>
+
+{{historia.diagnostico}}
+
+</p>
+
+</div>
+
+
+
+<div class="mb-3">
+
+<label>
+
+Tratamiento
+
+</label>
+
+<p>
+
+{{historia.tratamiento}}
+
+</p>
+
+</div>
+
+
+
+<div class="mb-3">
+
+<label>
+
+Receta
+
+</label>
+
+<p>
+
+{{historia.receta}}
+
+</p>
+
+</div>
+
+
+</div>
+
+
+
+<div *ngIf="!historia && !mostrarFormulario">
+
+<div class="empty-history">
+
+<i class="bi bi-journal-medical"></i>
+
+<h5>
+
+No existe historial clínico registrado
+
+</h5>
+
+
+<p>
+
+Puede registrar el diagnóstico, tratamiento y receta médica.
+
+</p>
+
+
+<button
+class="btn btn-success"
+(click)="abrirFormulario()">
+
+<i class="bi bi-plus-circle"></i>
+
+Registrar Historia Clínica
+
+</button>
+
+
+</div>
+
+</div>
+
+
+
+<div *ngIf="mostrarFormulario">
+
+
+<div class="mb-3">
+
+<label>
+
+Diagnóstico
+
+</label>
+
+<textarea
+rows="3"
+class="form-control"
+[(ngModel)]="nuevaHistoria.diagnostico">
+
+</textarea>
+
+</div>
+
+
+
+<div class="mb-3">
+
+<label>
+
+Tratamiento
+
+</label>
+
+<textarea
+rows="3"
+class="form-control"
+[(ngModel)]="nuevaHistoria.tratamiento">
+
+</textarea>
+
+</div>
+
+
+
+<div class="mb-3">
+
+<label>
+
+Receta
+
+</label>
+
+<textarea
+rows="3"
+class="form-control"
+[(ngModel)]="nuevaHistoria.receta">
+
+</textarea>
+
+</div>
+
+
+
+<button
+class="btn btn-success"
+(click)="guardarHistoria()">
+
+<i class="bi bi-save"></i>
+
+Guardar Historia Clínica
+
+</button>
+
+
+
+<button
+class="btn btn-secondary ms-2"
+(click)="mostrarFormulario=false">
+
+<i class="bi bi-x-circle"></i>
+
+Cancelar
+
+</button>
+
+
+</div>
+
+
+</div>
+
+
+
+<div class="buttons">
+
+<a
+routerLink="/appointments"
+class="btn btn-primary">
+
+<i class="bi bi-arrow-left"></i>
+
+Volver
+
+</a>
+
+</div>
+
+</div>
+
+</div>

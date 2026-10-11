@@ -1,0 +1,14 @@
+<div class="app-container" *ngIf="authService.isLoggedIn(); else loginTemplate">
+  <app-sidebar></app-sidebar>
+  <div class="main-content">
+    <app-header></app-header>
+    <div class="content-wrapper">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
+<ng-template #loginTemplate>
+  <router-outlet></router-outlet>
+</ng-template>
+<app-loading-spinner></app-loading-spinner>
+<app-toast-notifications></app-toast-notifications>

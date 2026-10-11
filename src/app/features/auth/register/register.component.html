@@ -1,0 +1,105 @@
+<div class="register-container">
+
+  <div class="register-card">
+
+    <div class="logo-section">
+      <i class="bi bi-person-plus-fill"></i>
+      <h2>Crear Cuenta</h2>
+      <p>Registro de usuarios en Medicitas</p>
+    </div>
+
+    <form (ngSubmit)="onSubmit()">
+
+      <div class="form-group">
+        <label>Usuario</label>
+
+        <div class="input-group">
+          <i class="bi bi-person-fill"></i>
+          <input
+            type="text"
+            [(ngModel)]="registerData.username"
+            name="username"
+            placeholder="Ingrese un usuario"
+            required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Contraseña</label>
+
+        <div class="input-group">
+          <i class="bi bi-lock-fill"></i>
+          <input
+            type="password"
+            [(ngModel)]="registerData.password"
+            name="password"
+            placeholder="Ingrese una contraseña"
+            required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Rol</label>
+
+        <div class="input-group">
+          <i class="bi bi-person-badge-fill"></i>
+
+          <select
+            [(ngModel)]="registerData.rol"
+            name="rol">
+
+            <option value="ADMIN">
+              Administrador
+            </option>
+
+            <option value="DOCTOR">
+              Médico
+            </option>
+
+            <option value="PACIENTE">
+              Paciente
+            </option>
+
+          </select>
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        class="btn-primary">
+
+        <i class="bi bi-person-plus-fill"></i>
+        Registrar Usuario
+
+      </button>
+
+      <p
+        class="success"
+        *ngIf="successMessage">
+
+        <i class="bi bi-check-circle-fill"></i>
+        {{ successMessage }}
+
+      </p>
+
+      <p
+        class="error"
+        *ngIf="errorMessage">
+
+        <i class="bi bi-exclamation-circle-fill"></i>
+        {{ errorMessage }}
+
+      </p>
+
+      <p class="login-link">
+        ¿Ya tienes cuenta?
+        <a routerLink="/auth/login">
+          Iniciar Sesión
+        </a>
+      </p>
+
+    </form>
+
+  </div>
+
+</div>

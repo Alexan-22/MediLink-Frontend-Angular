@@ -1,0 +1,197 @@
+<div class="doctor-form-container">
+
+    <div class="page-header">
+
+        <h2>
+
+            <i class="bi bi-person-vcard-fill"></i>
+
+            {{esEdicion ? 'Editar Médico' : 'Nuevo Médico'}}
+
+        </h2>
+
+        <p>
+
+            Complete la información del médico
+
+        </p>
+
+    </div>
+
+
+    <div class="form-card">
+
+        <form (ngSubmit)="guardar()">
+
+            <div class="form-grid">
+
+
+                <div class="form-group">
+
+                    <label>CMP</label>
+
+                    <div class="input-group">
+
+                        <i class="bi bi-patch-check-fill"></i>
+
+                        <input
+                            [(ngModel)]="medico.cmp"
+                            name="cmp"
+                            required>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="form-group">
+
+                    <label>Nombres</label>
+
+                    <div class="input-group">
+
+                        <i class="bi bi-person-fill"></i>
+
+                        <input
+                            [(ngModel)]="medico.nombres"
+                            name="nombres"
+                            required>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="form-group">
+
+                    <label>Apellidos</label>
+
+                    <div class="input-group">
+
+                        <i class="bi bi-person-badge-fill"></i>
+
+                        <input
+                            [(ngModel)]="medico.apellidos"
+                            name="apellidos"
+                            required>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="form-group">
+
+                    <label>Especialidad</label>
+
+                    <div class="input-group">
+
+                        <i class="bi bi-heart-pulse-fill"></i>
+
+                        <input
+                            [(ngModel)]="medico.especialidad"
+                            name="especialidad">
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="form-group">
+
+                    <label>Horario Inicio</label>
+
+                    <div class="input-group">
+
+                        <i class="bi bi-clock-fill"></i>
+
+                        <input
+                            type="time"
+                            [(ngModel)]="medico.horarioInicio"
+                            name="horarioInicio">
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="form-group">
+
+                    <label>Horario Fin</label>
+
+                    <div class="input-group">
+
+                        <i class="bi bi-clock-history"></i>
+
+                        <input
+                            type="time"
+                            [(ngModel)]="medico.horarioFin"
+                            name="horarioFin">
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="form-group full-width">
+
+                    <label>Estado</label>
+
+                    <div class="input-group">
+
+                        <i class="bi bi-check-circle-fill"></i>
+
+                        <select
+                            [(ngModel)]="medico.estado"
+                            name="estado">
+
+                            <option value="ACTIVO">
+
+                                ACTIVO
+
+                            </option>
+
+                            <option value="INACTIVO">
+
+                                INACTIVO
+
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+
+            <div class="button-group">
+
+
+                <button
+                        type="submit"
+                        class="btn-primary">
+
+                    <i class="bi bi-save-fill"></i>
+
+                    {{esEdicion ? 'Actualizar Médico' : 'Guardar Médico'}}
+
+                </button>
+
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>

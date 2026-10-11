@@ -1,0 +1,162 @@
+<div class="container mt-4">
+
+
+    <div
+            class="d-flex
+                   justify-content-between
+                   align-items-center
+                   mb-4">
+
+
+        <h2>
+
+            Usuarios
+
+        </h2>
+
+
+        <button
+
+                class="btn btn-primary"
+
+                (click)="nuevoUsuario()">
+
+
+            + Nuevo Usuario
+
+
+        </button>
+
+
+    </div>
+
+
+
+<table class="table table-striped">
+
+
+<thead>
+
+
+<tr>
+
+<th>ID</th>
+
+<th>Usuario</th>
+
+<th>Rol</th>
+
+<th>Acciones</th>
+
+
+</tr>
+
+
+</thead>
+
+
+
+<tbody>
+
+
+
+<tr
+
+*ngFor="let usuario of usuarios">
+
+
+<td>
+
+{{usuario.id}}
+
+</td>
+
+
+<td>
+
+{{usuario.username}}
+
+</td>
+
+
+<td>
+
+{{usuario.rol}}
+
+</td>
+
+
+<td>
+
+
+
+<button
+
+
+class="btn btn-warning btn-sm me-2"
+
+(click)="editar(
+
+usuario.id!
+
+)">
+
+
+Editar
+
+
+</button>
+
+<button
+
+class="btn btn-info btn-sm me-2"
+
+(click)="password(
+
+usuario.id!
+
+)">
+
+
+Password
+
+
+</button>
+
+
+
+<button
+
+
+class="btn btn-danger btn-sm"
+
+(click)="eliminar(
+
+usuario.id!
+
+)">
+
+
+Eliminar
+
+
+</button>
+
+
+</td>
+
+
+
+</tr>
+
+
+
+</tbody>
+
+
+
+</table>
+
+
+
+</div>

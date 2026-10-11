@@ -1,0 +1,195 @@
+<div class="container-fluid mt-4">
+
+  <div class="doctor-card">
+
+    <div class="header-section">
+
+      <div>
+
+        <h2>
+
+          <i class="bi bi-person-vcard-fill"></i>
+
+          Gestión de Médicos
+
+        </h2>
+
+        <p>
+
+          Administración de médicos registrados
+
+        </p>
+
+      </div>
+
+
+      <button
+        class="btn btn-primary"
+        routerLink="/doctors/new">
+
+        <i class="bi bi-plus-circle"></i>
+
+        Nuevo Médico
+
+      </button>
+
+    </div>
+
+
+
+    <div class="table-responsive">
+
+      <table class="table align-middle">
+
+        <thead>
+
+          <tr>
+
+            <th>ID</th>
+
+            <th>Médico</th>
+
+            <th>CMP</th>
+
+            <th>Especialidad</th>
+
+            <th>Estado</th>
+
+            <th>Acciones</th>
+
+          </tr>
+
+        </thead>
+
+
+
+        <tbody>
+
+          <tr *ngFor="let m of medicos">
+
+            <td>
+
+              #{{m.id}}
+
+            </td>
+
+
+            <td>
+
+              <div class="doctor-cell">
+
+                <div class="avatar">
+
+                  {{m.nombres.charAt(0)}}
+
+                </div>
+
+                <div>
+
+                  <strong>
+
+                    {{m.nombres}} {{m.apellidos}}
+
+                  </strong>
+
+                </div>
+
+              </div>
+
+            </td>
+
+
+
+            <td>
+
+              {{m.cmp}}
+
+            </td>
+
+
+
+            <td>
+
+              {{m.especialidad}}
+
+            </td>
+
+
+
+            <td>
+
+              <span
+
+                class="badge"
+
+                [ngClass]="{
+
+                  'badge-active':m.estado=='ACTIVO',
+
+                  'badge-inactive':m.estado!='ACTIVO'
+
+                }">
+
+                {{m.estado}}
+
+              </span>
+
+            </td>
+
+
+
+            <td>
+
+              <div class="actions">
+
+
+                <button
+
+                  class="btn btn-info btn-action"
+
+                  (click)="verDetalle(m.id!)">
+
+                  <i class="bi bi-eye"></i>
+
+                </button>
+
+
+
+                <button
+
+                  class="btn btn-warning btn-action"
+
+                  (click)="editar(m.id!)">
+
+                  <i class="bi bi-pencil"></i>
+
+                </button>
+
+
+
+                <button
+
+                  class="btn btn-danger btn-action"
+
+                  (click)="eliminar(m.id!)">
+
+                  <i class="bi bi-trash"></i>
+
+                </button>
+
+
+              </div>
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>

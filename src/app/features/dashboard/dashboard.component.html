@@ -1,0 +1,125 @@
+<div class="dashboard">
+
+  <div class="dashboard-header">
+    <h1>Panel de Control</h1>
+    <p>Resumen general del sistema Medicitas</p>
+  </div>
+  <div class="user-role">
+
+  <span>
+
+      Bienvenido
+
+      <strong>
+
+          {{ role }}
+
+      </strong>
+
+  </span>
+
+</div>
+
+  <div class="stats-grid">
+
+    <div *ngIf="role!='MEDICO'" class="stat-card">
+      <div class="card-header">
+        <i class="bi bi-people-fill"></i>
+        <span>Pacientes</span>
+      </div>
+      <div class="card-number">
+        {{ general.totalPacientes }}
+      </div>
+    </div>
+
+    <div *ngIf="role!='MEDICO'" class="stat-card">
+      <div class="card-header">
+        <i class="bi bi-heart-pulse-fill"></i>
+        <span>Médicos</span>
+      </div>
+      <div class="card-number">
+        {{ general.totalMedicos }}
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="card-header">
+        <i class="bi bi-calendar-check-fill"></i>
+        <span>Citas</span>
+      </div>
+      <div class="card-number">
+        {{ general.totalCitas }}
+      </div>
+    </div>
+
+    <div *ngIf="role=='ADMIN'" class="stat-card">
+      <div class="card-header">
+        <i class="bi bi-bell-fill"></i>
+        <span>Notificaciones</span>
+      </div>
+      <div class="card-number">
+        {{ general.totalNotificaciones }}
+      </div>
+    </div>
+
+  </div>
+
+  <div class="activity-grid">
+
+    <div *ngIf="role!='MEDICO'" class="stat-card">
+      <div class="card-header">
+        <i class="bi bi-person-check-fill"></i>
+        <span>Pacientes Activos</span>
+      </div>
+      <div class="card-number">
+        {{ activos.pacientesActivos }}
+      </div>
+    </div>
+
+    <div *ngIf="role=='ADMIN'" class="stat-card">
+      <div class="card-header">
+        <i class="bi bi-hospital-fill"></i>
+        <span>Médicos Activos</span>
+      </div>
+      <div class="card-number">
+        {{ activos.medicosActivos }}
+      </div>
+    </div>
+
+  </div>
+
+  <div class="estado-card">
+
+    <h3>Estado de Citas</h3>
+
+    <div class="estado-grid">
+
+      <div class="estado-item">
+        <i class="bi bi-calendar-event"></i>
+        <span>Programadas</span>
+        <strong>{{ estadoCitas.programadas }}</strong>
+      </div>
+
+      <div class="estado-item">
+        <i class="bi bi-check-circle-fill"></i>
+        <span>Atendidas</span>
+        <strong>{{ estadoCitas.atendidas }}</strong>
+      </div>
+
+      <div class="estado-item">
+        <i class="bi bi-x-circle-fill"></i>
+        <span>Canceladas</span>
+        <strong>{{ estadoCitas.canceladas }}</strong>
+      </div>
+
+      <div class="estado-item">
+        <i class="bi bi-person-x-fill"></i>
+        <span>No Asistió</span>
+        <strong>{{ estadoCitas.noAsistio }}</strong>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

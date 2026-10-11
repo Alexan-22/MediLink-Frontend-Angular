@@ -1,0 +1,185 @@
+.register-container {
+  min-height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: linear-gradient(
+    135deg,
+    #4f6edb,
+    #7b4cc7
+  );
+
+  padding: 20px;
+}
+
+.register-card {
+  width: 100%;
+  max-width: 450px;
+
+  background: #ffffff;
+
+  border-radius: 20px;
+
+  padding: 40px;
+
+  box-shadow:
+    0 20px 40px rgba(0,0,0,0.15);
+}
+
+.logo-section {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.logo-section i {
+  font-size: 60px;
+  color: #4f6edb;
+}
+
+.logo-section h2 {
+  margin-top: 10px;
+  margin-bottom: 5px;
+  font-size: 30px;
+  color: #111827;
+}
+
+.logo-section p {
+  color: #6b7280;
+  margin: 0;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+
+  margin-bottom: 8px;
+
+  font-weight: 600;
+
+  color: #374151;
+}
+
+.input-group {
+  position: relative;
+}
+
+.input-group i {
+  position: absolute;
+
+  left: 15px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  color: #6b7280;
+
+  z-index: 2;
+}
+
+.input-group input,
+.input-group select {
+
+  width: 100%;
+
+  padding: 12px 12px 12px 45px;
+
+  border: 1px solid #d1d5db;
+
+  border-radius: 10px;
+
+  font-size: 14px;
+
+  transition: all .3s ease;
+
+  box-sizing: border-box;
+}
+
+.input-group input:focus,
+.input-group select:focus {
+
+  outline: none;
+
+  border-color: #4f6edb;
+
+  box-shadow:
+    0 0 0 4px rgba(79,110,219,0.15);
+}
+
+.btn-primary {
+
+  width: 100%;
+
+  padding: 14px;
+
+  border: none;
+
+  border-radius: 10px;
+
+  background: #4f6edb;
+
+  color: white;
+
+  font-size: 15px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all .3s ease;
+}
+
+.btn-primary:hover {
+  background: #3d5bc9;
+  transform: translateY(-2px);
+}
+
+.btn-primary i {
+  margin-right: 8px;
+}
+
+.success {
+
+  margin-top: 15px;
+
+  text-align: center;
+
+  color: #16a34a;
+
+  font-weight: 600;
+}
+
+.error {
+
+  margin-top: 15px;
+
+  text-align: center;
+
+  color: #dc2626;
+
+  font-weight: 600;
+}
+
+.login-link {
+
+  margin-top: 20px;
+
+  text-align: center;
+}
+
+.login-link a {
+
+  text-decoration: none;
+
+  color: #4f6edb;
+
+  font-weight: 600;
+}
+
+.login-link a:hover {
+  text-decoration: underline;
+}

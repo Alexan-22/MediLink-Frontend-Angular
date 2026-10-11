@@ -1,0 +1,196 @@
+<div class="container-fluid mt-4">
+
+  <div class="appointment-card">
+
+    <div class="header-section">
+      <div>
+        <h2>
+          <i class="bi bi-calendar2-heart"></i>
+          Gestión de Citas
+        </h2>
+        <p>Administración de citas médicas</p>
+      </div>
+
+      <button
+        class="btn btn-primary"
+        routerLink="/appointments/new">
+
+        <i class="bi bi-plus-circle"></i>
+        Nueva cita
+
+      </button>
+    </div>
+
+    <div class="table-responsive">
+
+      <table class="table align-middle">
+
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Paciente</th>
+            <th>Médico</th>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr *ngFor="let cita of citas">
+
+            <td>#{{ cita.id }}</td>
+
+            <td>
+
+  <div class="person-cell">
+
+    <div class="avatar">
+
+      {{cita.paciente.charAt(0)}}
+
+    </div>
+
+
+    <div>
+
+      <strong>
+
+        {{cita.paciente}}
+
+      </strong>
+
+
+      <br>
+
+
+      <small class="text-muted">
+
+ID {{cita.id}}
+
+</small>
+
+
+    </div>
+
+
+  </div>
+
+
+</td>
+
+            <td>
+
+  <div>
+
+    <strong>
+
+      Dr. {{cita.medico}}
+
+    </strong>
+
+  </div>
+
+
+  <small class="text-muted">
+
+    {{cita.especialidad}}
+
+  </small>
+
+
+</td>
+
+            <td>{{ cita.fecha }}</td>
+
+            <td>{{ cita.hora }}</td>
+
+            <td>
+
+              <span
+                class="badge badge-programada"
+                *ngIf="cita.estado == 'PROGRAMADA'">
+                PROGRAMADA
+              </span>
+
+              <span
+                class="badge badge-atendida"
+                *ngIf="cita.estado == 'ATENDIDA'">
+                ATENDIDA
+              </span>
+
+              <span
+                class="badge badge-cancelada"
+                *ngIf="cita.estado == 'CANCELADA'">
+                CANCELADA
+              </span>
+
+              <span
+                class="badge badge-no"
+                *ngIf="cita.estado == 'NO_ASISTIO'">
+                NO ASISTIÓ
+              </span>
+
+            </td>
+
+            <td>
+
+              <div class="actions">
+
+                <button
+class="btn btn-outline-info btn-action"
+(click)="verDetalle(cita.id!)">
+
+<i class="bi bi-eye"></i>
+
+</button>
+
+                <button
+class="btn btn-outline-warning btn-action"
+(click)="editar(cita.id!)">
+
+<i class="bi bi-pencil"></i>
+
+</button>
+
+                <button
+class="btn btn-outline-success btn-action"
+(click)="atender(cita.id!)">
+
+<i class="bi bi-check-circle"></i>
+
+</button>
+
+                <button
+class="btn btn-outline-secondary btn-action"
+(click)="cancelar(cita.id!)">
+
+<i class="bi bi-x-circle"></i>
+
+</button>
+
+                <button
+class="btn btn-outline-danger btn-action"
+(click)="noAsistio(cita.id!)">
+
+<i class="bi bi-person-x"></i>
+
+</button>
+
+              </div>
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>

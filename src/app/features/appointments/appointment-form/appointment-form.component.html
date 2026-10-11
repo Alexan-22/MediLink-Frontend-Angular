@@ -1,0 +1,202 @@
+<div class="container-fluid mt-4">
+
+<div class="form-card">
+
+<div class="header">
+
+<div>
+
+<h2>
+<i class="bi bi-calendar2-plus"></i>
+{{esEdicion?'Editar Cita':'Nueva Cita'}}
+</h2>
+
+<p>Programación de citas médicas</p>
+
+</div>
+</div>
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">Paciente</label>
+
+<select class="form-select" [(ngModel)]="cita.pacienteId">
+
+<option *ngFor="let p of pacientes" [value]="p.id">
+
+{{p.nombres}} {{p.apellidos}}
+
+</option>
+
+</select>
+
+</div>
+
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">Médico</label>
+
+<select
+class="form-select"
+[(ngModel)]="cita.medicoId"
+(change)="cargarHoras()">
+
+<option *ngFor="let m of medicos"
+[value]="m.id">
+
+Dr. {{m.nombres}} {{m.apellidos}}
+
+- {{m.especialidad}}
+
+</option>
+
+</select>
+
+</div>
+
+
+<div class="col-md-6 mb-4">
+
+<label class="form-label">Fecha</label>
+
+<input
+type="date"
+class="form-control"
+[(ngModel)]="cita.fecha"
+(change)="cargarHoras()">
+
+</div>
+
+
+<div class="col-md-6">
+
+<label class="form-label">
+
+Horas Disponibles
+
+</label>
+
+
+<div class="hour-grid">
+
+
+<button
+
+type="button"
+
+*ngFor="let h of horasDisponibles"
+
+class="btn"
+
+[ngClass]="{
+
+'btn-primary':cita.hora==h,
+
+'btn-outline-primary':cita.hora!=h
+
+}"
+
+(click)="cita.hora=h">
+
+{{h}}
+
+</button>
+
+
+</div>
+
+
+</div>
+
+
+<div class="col-md-12 mb-3">
+
+<label class="form-label">
+
+Motivo Consulta
+
+</label>
+
+
+<input
+
+class="form-control"
+
+[(ngModel)]="cita.motivoConsulta">
+
+
+</div>
+
+
+
+<div class="col-md-12 mb-4">
+
+<label class="form-label">
+
+Observaciones
+
+</label>
+
+
+<textarea
+
+rows="4"
+
+class="form-control"
+
+[(ngModel)]="cita.observaciones">
+
+
+</textarea>
+
+
+</div>
+
+
+<div class="buttons">
+
+
+<button
+
+class="btn btn-success"
+
+(click)="guardar()">
+
+<i class="bi bi-save"></i>
+
+Guardar
+
+
+</button>
+
+
+
+<button
+
+class="btn btn-secondary"
+
+routerLink="/appointments">
+
+<i class="bi bi-arrow-left"></i>
+
+Volver
+
+
+</button>
+
+
+
+</div>
+
+
+
+</div>
+
+
+</div>
+
+
+</div>
