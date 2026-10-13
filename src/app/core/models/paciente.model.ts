@@ -1,5 +1,6 @@
 export interface Paciente {
   id?: number;
+  usuarioId?: number | null;
   dni: string;
   nombres: string;
   apellidos: string;

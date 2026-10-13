@@ -1,202 +1,121 @@
-<div class="container-fluid mt-4">
-
-<div class="form-card">
-
-<div class="header">
-
-<div>
-
-<h2>
-<i class="bi bi-calendar2-plus"></i>
-{{esEdicion?'Editar Cita':'Nueva Cita'}}
-</h2>
-
-<p>Programación de citas médicas</p>
-
-</div>
-</div>
-
-<div class="row">
-
-<div class="col-md-6 mb-3">
-
-<label class="form-label">Paciente</label>
-
-<select class="form-select" [(ngModel)]="cita.pacienteId">
-
-<option *ngFor="let p of pacientes" [value]="p.id">
-
-{{p.nombres}} {{p.apellidos}}
-
-</option>
-
-</select>
-
-</div>
-
-
-<div class="col-md-6 mb-3">
-
-<label class="form-label">Médico</label>
-
-<select
-class="form-select"
-[(ngModel)]="cita.medicoId"
-(change)="cargarHoras()">
-
-<option *ngFor="let m of medicos"
-[value]="m.id">
-
-Dr. {{m.nombres}} {{m.apellidos}}
-
-- {{m.especialidad}}
-
-</option>
-
-</select>
-
-</div>
-
-
-<div class="col-md-6 mb-4">
-
-<label class="form-label">Fecha</label>
-
-<input
-type="date"
-class="form-control"
-[(ngModel)]="cita.fecha"
-(change)="cargarHoras()">
-
-</div>
-
-
-<div class="col-md-6">
-
-<label class="form-label">
-
-Horas Disponibles
-
-</label>
-
-
-<div class="hour-grid">
-
-
-<button
-
-type="button"
-
-*ngFor="let h of horasDisponibles"
-
-class="btn"
-
-[ngClass]="{
-
-'btn-primary':cita.hora==h,
-
-'btn-outline-primary':cita.hora!=h
-
-}"
-
-(click)="cita.hora=h">
-
-{{h}}
-
-</button>
-
-
-</div>
-
-
-</div>
-
-
-<div class="col-md-12 mb-3">
-
-<label class="form-label">
-
-Motivo Consulta
-
-</label>
-
-
-<input
-
-class="form-control"
-
-[(ngModel)]="cita.motivoConsulta">
-
-
-</div>
-
-
-
-<div class="col-md-12 mb-4">
-
-<label class="form-label">
-
-Observaciones
-
-</label>
-
-
-<textarea
-
-rows="4"
-
-class="form-control"
-
-[(ngModel)]="cita.observaciones">
-
-
-</textarea>
-
-
-</div>
-
-
-<div class="buttons">
-
-
-<button
-
-class="btn btn-success"
-
-(click)="guardar()">
-
-<i class="bi bi-save"></i>
-
-Guardar
-
-
-</button>
-
-
-
-<button
-
-class="btn btn-secondary"
-
-routerLink="/appointments">
-
-<i class="bi bi-arrow-left"></i>
-
-Volver
-
-
-</button>
-
-
-
-</div>
-
-
-
-</div>
-
-
-</div>
-
-
+<div class="appointment-page">
+  <section class="form-card">
+    <header class="form-header">
+      <div class="header-icon" aria-hidden="true">
+        <i class="bi bi-calendar2-plus"></i>
+      </div>
+      <div>
+        <h2>{{ esEdicion ? 'Editar cita' : 'Nueva cita' }}</h2>
+        <p>Selecciona al paciente, al médico y un horario disponible.</p>
+      </div>
+    </header>
+
+    <p class="message error" role="alert" *ngIf="errorFormulario">
+      {{ errorFormulario }}
+    </p>
+    <p class="message" *ngIf="cargandoCita">Cargando cita…</p>
+
+    <form (ngSubmit)="guardar()" #formulario="ngForm">
+      <fieldset [disabled]="guardando || cargandoCita">
+        <div class="form-grid">
+          <div class="field">
+            <label for="paciente">Paciente <span>*</span></label>
+            <select id="paciente" name="paciente"
+                    [(ngModel)]="cita.pacienteId" required>
+              <option [ngValue]="0" disabled>Selecciona un paciente</option>
+              <option *ngFor="let p of pacientes" [ngValue]="p.id">
+                {{ p.nombres }} {{ p.apellidos }}
+              </option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="medico">Médico <span>*</span></label>
+            <select id="medico" name="medico"
+                    [(ngModel)]="cita.medicoId"
+                    (ngModelChange)="cargarHoras()" required>
+              <option [ngValue]="0" disabled>Selecciona un médico</option>
+              <option *ngFor="let m of medicos" [ngValue]="m.id">
+                {{ m.nombres }} {{ m.apellidos }} — {{ m.especialidad }}
+              </option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="fecha">Fecha <span>*</span></label>
+            <input id="fecha" name="fecha" type="date"
+                   [(ngModel)]="cita.fecha"
+                   (ngModelChange)="cargarHoras()" required>
+          </div>
+
+          <div class="field selected-time">
+            <label>Hora seleccionada</label>
+            <div class="time-summary">
+              <i class="bi bi-clock" aria-hidden="true"></i>
+              {{ cita.hora ? cita.hora.slice(0, 5) : 'Selecciona un horario abajo' }}
+            </div>
+          </div>
+
+          <section class="availability full-width"
+                   aria-labelledby="horarios-titulo"
+                   [attr.aria-busy]="cargandoHoras">
+            <h3 id="horarios-titulo">Horas disponibles <span>*</span></h3>
+            <div aria-live="polite">
+              <p *ngIf="!cita.medicoId || !cita.fecha">
+                Selecciona un médico y una fecha para consultar horarios.
+              </p>
+              <p *ngIf="cargandoHoras">Consultando horarios…</p>
+              <p class="error-text" *ngIf="errorHoras">{{ errorHoras }}</p>
+              <p *ngIf="cita.medicoId && cita.fecha && !cargandoHoras &&
+                        !errorHoras && !horasDisponibles.length">
+                No hay horarios disponibles para esta fecha.
+              </p>
+            </div>
+
+            <button type="button" class="retry" *ngIf="errorHoras"
+                    (click)="cargarHoras()">Reintentar consulta</button>
+
+            <div class="hour-grid" *ngIf="!cargandoHoras && !errorHoras">
+              <button type="button" *ngFor="let h of horasDisponibles"
+                      class="hour-button"
+                      [class.selected]="cita.hora === h"
+                      [attr.aria-pressed]="cita.hora === h"
+                      (click)="cita.hora = h">
+                {{ h.slice(0, 5) }}
+              </button>
+            </div>
+          </section>
+
+          <div class="field full-width">
+            <label for="motivo">Motivo de consulta <span>*</span></label>
+            <input id="motivo" name="motivo"
+                   [(ngModel)]="cita.motivoConsulta"
+                   placeholder="Escribe el motivo de la consulta" required>
+          </div>
+
+          <div class="field full-width">
+            <label for="observaciones">
+              Observaciones <small>(opcional)</small>
+            </label>
+            <textarea id="observaciones" name="observaciones" rows="4"
+                      [(ngModel)]="cita.observaciones"
+                      placeholder="Agrega información adicional"></textarea>
+          </div>
+        </div>
+
+        <footer class="form-actions">
+          <p>Los campos con <span>*</span> son obligatorios.</p>
+          <div class="action-buttons">
+            <button type="button" class="button secondary"
+                    routerLink="/appointments">Volver</button>
+            <button type="submit" class="button primary"
+                    [disabled]="!puedeGuardar">
+              <i class="bi bi-save" aria-hidden="true"></i>
+              {{ guardando ? 'Guardando…' : 'Guardar cita' }}
+            </button>
+          </div>
+        </footer>
+      </fieldset>
+    </form>
+  </section>
 </div>

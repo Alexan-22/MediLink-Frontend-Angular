@@ -1,0 +1,123 @@
+<section class="reports-page">
+  <header class="page-header">
+    <div>
+      <h2><i class="bi bi-bar-chart" aria-hidden="true"></i> Reportes</h2>
+      <p>Resumen general de MediCitas</p>
+    </div>
+  </header>
+
+  <nav class="report-nav" aria-label="Tipos de reporte">
+    <a routerLink="/reports" routerLinkActive="active"
+       [routerLinkActiveOptions]="{ exact: true }">General</a>
+    <a routerLink="/reports/appointments">Citas</a>
+    <a routerLink="/reports/patients">Pacientes</a>
+    <a routerLink="/reports/doctors">Médicos</a>
+  </nav>
+
+  <section aria-labelledby="resumen-titulo">
+    <h3 id="resumen-titulo" class="section-title">Resumen general</h3>
+
+    <div class="summary-grid">
+      <article class="stat-card">
+        <div class="stat-icon blue">
+          <i class="bi bi-people" aria-hidden="true"></i>
+        </div>
+        <div>
+          <p>Pacientes registrados</p>
+          <strong>{{ general.totalPacientes }}</strong>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <div class="stat-icon purple">
+          <i class="bi bi-heart-pulse" aria-hidden="true"></i>
+        </div>
+        <div>
+          <p>Médicos registrados</p>
+          <strong>{{ general.totalMedicos }}</strong>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <div class="stat-icon cyan">
+          <i class="bi bi-calendar2-check" aria-hidden="true"></i>
+        </div>
+        <div>
+          <p>Citas registradas</p>
+          <strong>{{ general.totalCitas }}</strong>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <div class="stat-icon orange">
+          <i class="bi bi-bell" aria-hidden="true"></i>
+        </div>
+        <div>
+          <p>Notificaciones registradas</p>
+          <strong>{{ general.totalNotificaciones }}</strong>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <div class="detail-grid">
+    <section class="panel" aria-labelledby="activos-titulo">
+      <header class="panel-header">
+        <h3 id="activos-titulo">Pacientes y médicos activos</h3>
+        <p>Registros que tienen estado activo.</p>
+      </header>
+
+      <div class="active-row">
+        <div>
+          <span class="indicator blue-dot"></span>
+          Pacientes activos
+        </div>
+        <strong>{{ activos.pacientesActivos }}</strong>
+      </div>
+
+      <div class="active-row">
+        <div>
+          <span class="indicator purple-dot"></span>
+          Médicos activos
+        </div>
+        <strong>{{ activos.medicosActivos }}</strong>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="estados-titulo">
+      <header class="panel-header">
+        <h3 id="estados-titulo">Citas por estado</h3>
+        <p>Distribución de las citas registradas.</p>
+      </header>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Estado</th>
+              <th scope="col" class="number">Cantidad</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="badge scheduled">Programadas</span></td>
+              <td class="number">{{ citasEstado.programadas }}</td>
+            </tr>
+            <tr>
+              <td><span class="badge attended">Atendidas</span></td>
+              <td class="number">{{ citasEstado.atendidas }}</td>
+            </tr>
+            <tr>
+              <td><span class="badge cancelled">Canceladas</span></td>
+              <td class="number">{{ citasEstado.canceladas }}</td>
+            </tr>
+            <tr>
+              <td><span class="badge absent">No asistió</span></td>
+              <td class="number">{{ citasEstado.noAsistio }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</section>

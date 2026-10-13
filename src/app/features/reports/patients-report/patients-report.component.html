@@ -1,0 +1,82 @@
+<section class="report-page">
+  <header class="report-header">
+    <h1>
+      <i class="bi bi-people" aria-hidden="true"></i>
+      Reporte de pacientes
+    </h1>
+    <p>Consulta los pacientes registrados y sus datos de contacto.</p>
+  </header>
+
+  <nav class="report-tabs" aria-label="Reportes">
+    <a routerLink="/reports">General</a>
+    <a routerLink="/reports/appointments">Citas</a>
+    <a routerLink="/reports/patients" routerLinkActive="active"
+       ariaCurrentWhenActive="page">Pacientes</a>
+    <a routerLink="/reports/doctors">Médicos</a>
+  </nav>
+
+  <div class="summary-card">
+    <span class="summary-icon" aria-hidden="true">
+      <i class="bi bi-people-fill"></i>
+    </span>
+    <div>
+      <span>Pacientes en el listado</span>
+      <strong>{{ pacientes.length }}</strong>
+    </div>
+  </div>
+
+  <article class="report-card">
+    <header class="table-heading">
+      <h2>Detalle de pacientes</h2>
+      <span>{{ pacientes.length }} registros</span>
+    </header>
+
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">DNI</th>
+            <th scope="col">Paciente</th>
+            <th scope="col">Teléfono</th>
+            <th scope="col">Email</th>
+            <th scope="col">Fecha de registro</th>
+            <th scope="col">Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of pacientes">
+            <td class="id-cell">#{{ p.id }}</td>
+            <td class="nowrap">{{ p.dni || 'Sin registrar' }}</td>
+            <td>
+              <div class="patient-cell">
+                <span class="avatar" aria-hidden="true">
+                  {{ p.nombres ? p.nombres.charAt(0).toUpperCase() : 'P' }}
+                </span>
+                <strong>{{ p.nombres }} {{ p.apellidos }}</strong>
+              </div>
+            </td>
+            <td class="nowrap">{{ p.telefono || 'Sin registrar' }}</td>
+            <td class="email-cell">{{ p.email || 'Sin registrar' }}</td>
+            <td class="nowrap">
+              {{ p.fechaRegistro
+                ? (p.fechaRegistro | date:'dd/MM/yyyy')
+                : 'Sin registrar' }}
+            </td>
+            <td>
+              <span class="status"
+                    [class.active-status]="p.estado === 'ACTIVO'"
+                    [class.inactive-status]="p.estado === 'INACTIVO'">
+                {{ p.estado || 'Sin registrar' }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <footer class="table-note">
+      Este reporte permite consultar los datos. Para modificarlos, ingresa a Pacientes.
+    </footer>
+  </article>
+</section>

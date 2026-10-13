@@ -27,4 +27,7 @@ export class PatientService {
   contarActivos(): Observable<number> {
     return this.http.get<number>(`${this.apiUrl}/count/activos`);
   }
+  miPerfil(): Observable<Paciente> {
+  return this.http.get<Paciente>(`${this.apiUrl}/me`);
+  }
 }

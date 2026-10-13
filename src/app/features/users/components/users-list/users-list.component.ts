@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
 import { Usuario } from '../../../../core/models/usuario.model';
 import { UserService } from '../../../../services/user.service';
 
@@ -10,97 +9,33 @@ import { UserService } from '../../../../services/user.service';
   styleUrls: ['./users-list.component.scss']
 })
 export class UsersListComponent implements OnInit {
-
   usuarios: Usuario[] = [];
 
-  constructor(
-    private userService: UserService,
-    private router: Router
-  ) { }
+  constructor(private userService: UserService, private router: Router) {}
 
   ngOnInit(): void {
-
     this.cargarUsuarios();
-
   }
-
 
   cargarUsuarios(): void {
-
-    this.userService
-      .listar()
-      .subscribe(
-
-        data =>
-
-          this.usuarios = data
-
-      );
-
+    this.userService.listar().subscribe(data => this.usuarios = data);
   }
-
 
   nuevoUsuario(): void {
-
-    this.router.navigate(
-
-      ['/users/new']
-
-    );
-
+    this.router.navigate(['/users/new']);
   }
-
 
   editar(id: number): void {
-
-    this.router.navigate(
-
-      ['/users/edit', id]
-
-    );
-
+    this.router.navigate(['/users/edit', id]);
   }
 
-  password(
-
-id:number
-
-):void{
-
-
-this.router.navigate(
-
-['/users/password',id]
-
-);
-
-
-}
-
+  password(id: number): void {
+    this.router.navigate(['/users/password', id]);
+  }
 
   eliminar(id: number): void {
-
-
     if (confirm('¿Eliminar usuario?')) {
-
-
-      this.userService
-
-        .eliminar(id)
-
-        .subscribe(() => {
-
-
-          this.cargarUsuarios();
-
-
-        });
-
-
+      this.userService.eliminar(id).subscribe(() => this.cargarUsuarios());
     }
-
-
   }
-
-
 }

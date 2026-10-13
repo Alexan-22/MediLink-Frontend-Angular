@@ -1,0 +1,78 @@
+<section class="appointments-page">
+  <header class="page-heading">
+    <div>
+      <span class="eyebrow">MI ATENCIÓN MÉDICA</span>
+      <h1>Mis citas</h1>
+      <p>Consulta tus citas programadas y tu historial de atención.</p>
+    </div>
+
+    <button type="button" class="refresh-button"
+            (click)="cargar()" [disabled]="cargando">
+      <i class="bi bi-arrow-clockwise" aria-hidden="true"></i>
+      {{ cargando ? 'Cargando...' : 'Actualizar' }}
+    </button>
+  </header>
+
+  <div class="message" *ngIf="cargando" role="status">
+    Cargando tus citas...
+  </div>
+
+  <div class="message error-message" *ngIf="error" role="alert">
+    {{ error }}
+  </div>
+
+  <ng-container *ngIf="!cargando && !error">
+    <div class="empty-state" *ngIf="!citas.length">
+      <i class="bi bi-calendar2-check" aria-hidden="true"></i>
+      <h2>Aún no tienes citas registradas</h2>
+      <p>Comunícate con recepción para programar tu atención.</p>
+    </div>
+
+    <ng-container *ngIf="citas.length">
+      <p class="record-count">{{ citas.length }} citas registradas</p>
+
+      <div class="appointments-grid">
+        <article class="appointment-card"
+                 *ngFor="let cita of citas; trackBy: trackById">
+          <header class="card-top">
+            <span class="appointment-id">Cita #{{ cita.id }}</span>
+            <span class="status"
+                  [class.programada]="cita.estado === 'PROGRAMADA'"
+                  [class.atendida]="cita.estado === 'ATENDIDA'"
+                  [class.cancelada]="cita.estado === 'CANCELADA'"
+                  [class.no-asistio]="cita.estado === 'NO_ASISTIO'">
+              {{ nombreEstado(cita.estado) }}
+            </span>
+          </header>
+
+          <div class="doctor-info">
+            <span class="doctor-icon" aria-hidden="true">
+              <i class="bi bi-heart-pulse"></i>
+            </span>
+            <div>
+              <h2>{{ cita.medico || 'Médico no registrado' }}</h2>
+              <p>{{ cita.especialidad || 'Especialidad no registrada' }}</p>
+            </div>
+          </div>
+
+          <dl class="appointment-details">
+            <div>
+              <dt><i class="bi bi-calendar3" aria-hidden="true"></i> Fecha</dt>
+              <dd>{{ cita.fecha
+                ? (cita.fecha | date:'dd/MM/yyyy')
+                : 'Sin registrar' }}</dd>
+            </div>
+            <div>
+              <dt><i class="bi bi-clock" aria-hidden="true"></i> Hora</dt>
+              <dd>{{ cita.hora ? cita.hora.slice(0, 5) : 'Sin registrar' }}</dd>
+            </div>
+          </dl>
+
+          <p class="missing-time" *ngIf="!cita.hora">
+            Consulta con recepción para confirmar el horario.
+          </p>
+        </article>
+      </div>
+    </ng-container>
+  </ng-container>
+</section>

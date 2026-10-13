@@ -1,0 +1,145 @@
+:host {
+  display: block;
+  padding: 32px;
+  color: #1e293b;
+}
+
+.container { max-width: 760px; margin: 0 auto; }
+
+.card {
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  box-shadow: 0 8px 28px rgba(15, 23, 42, .06);
+}
+
+.card-header {
+  padding: 24px 28px;
+  background: #eff6ff;
+  border-bottom: 1px solid #dbeafe;
+
+  h3 {
+    margin: 0;
+    color: #1e40af;
+    font-size: 25px;
+    font-weight: 700;
+  }
+}
+
+.card-body { padding: 28px; }
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+form > .mb-3 {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 0;
+}
+
+label {
+  display: block;
+  color: #334155;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+input, select {
+  display: block;
+  width: 100%;
+  min-height: 46px;
+  padding: 12px 14px;
+  box-sizing: border-box;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  background: #fff;
+  color: #0f172a;
+  font: inherit;
+  transition: border-color .2s, box-shadow .2s;
+
+  &:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, .12);
+  }
+
+  &:disabled { background: #f1f5f9; cursor: not-allowed; }
+}
+
+button {
+  min-height: 44px;
+  padding: 12px 22px;
+  border-radius: 10px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 3px solid #93c5fd;
+    outline-offset: 3px;
+  }
+
+  &:disabled { opacity: .6; cursor: not-allowed; }
+}
+
+.password-field {
+  position: relative;
+
+  input { padding-right: 120px; }
+}
+
+.password-toggle {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 7px 12px;
+  border: none;
+  border-radius: 7px;
+  background: #0284c7;
+  color: #fff;
+  font-size: 13px;
+
+  &:hover { background: #0369a1; }
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-top: 8px;
+}
+
+.btn-primary {
+  border: 1px solid #2563eb;
+  background: #2563eb;
+  color: #fff;
+
+  &:hover:not(:disabled) { background: #1d4ed8; }
+}
+
+.btn-secondary {
+  border: 1px solid #cbd5e1;
+  background: #f8fafc;
+  color: #475569;
+
+  &:hover:not(:disabled) { background: #e2e8f0; }
+}
+
+@media (max-width: 600px) {
+  :host { padding: 20px 14px; }
+  .card-header { padding: 20px; }
+  .card-header h3 { font-size: 22px; }
+  .card-body { padding: 20px; }
+}

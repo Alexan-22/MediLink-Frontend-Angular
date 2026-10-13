@@ -1,0 +1,132 @@
+<section class="notifications-page">
+  <div class="notifications-card">
+    <header class="page-header">
+      <div>
+        <h2><i class="bi bi-bell"></i> Notificaciones</h2>
+        <p>Consulta los mensajes registrados para las citas médicas.</p>
+      </div>
+
+      <div class="header-actions">
+        <button type="button" class="button secondary"
+                (click)="cargarNotificaciones()" [disabled]="loading">
+          {{ loading ? 'Cargando…' : 'Actualizar' }}
+        </button>
+        <button type="button" class="button primary"
+                (click)="mostrarForm = !mostrarForm">
+          {{ mostrarForm ? 'Cerrar formulario' : 'Nueva notificación' }}
+        </button>
+      </div>
+    </header>
+
+    <form *ngIf="mostrarForm" class="notification-form"
+          #formulario="ngForm" (ngSubmit)="crearNotificacion()">
+      <h3>Nueva notificación</h3>
+
+      <div class="form-grid">
+        <div class="field">
+          <label for="citaId">ID de la cita</label>
+          <input id="citaId" name="citaId" type="number" min="1"
+                 [(ngModel)]="nuevaNotificacion.citaId" required>
+        </div>
+
+        <div class="field">
+          <label for="tipo">Tipo</label>
+          <select id="tipo" name="tipo"
+                  [(ngModel)]="nuevaNotificacion.tipo" required>
+            <option value="EMAIL">EMAIL</option>
+          </select>
+        </div>
+
+        <div class="field full-width">
+          <label for="destinatario">Correo del destinatario</label>
+          <input id="destinatario" name="destinatario" type="email"
+                 placeholder="paciente@example.com"
+                 [(ngModel)]="nuevaNotificacion.destinatario"
+                 required email>
+        </div>
+
+        <div class="field full-width">
+          <label for="mensaje">Mensaje</label>
+          <textarea id="mensaje" name="mensaje" rows="3"
+                    placeholder="Escribe el mensaje"
+                    [(ngModel)]="nuevaNotificacion.mensaje" required></textarea>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="button secondary"
+                (click)="mostrarForm = false">Cancelar</button>
+        <button type="submit" class="button primary"
+                [disabled]="formulario.invalid ||
+                            nuevaNotificacion.citaId <= 0 ||
+                            !nuevaNotificacion.mensaje.trim()">
+          Guardar notificación
+        </button>
+      </div>
+    </form>
+
+    <p class="loading-message" role="status" *ngIf="loading">
+      Cargando notificaciones…
+    </p>
+
+    <ng-container *ngIf="!loading">
+      <div class="empty-state" *ngIf="!notificaciones.length">
+        <i class="bi bi-bell" aria-hidden="true"></i>
+        <h3>No hay notificaciones para mostrar</h3>
+        <p>Pulsa Actualizar para consultar nuevamente.</p>
+      </div>
+
+      <div *ngIf="notificaciones.length">
+        <p class="record-count">
+          {{ notificaciones.length }} notificaciones registradas
+        </p>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Cita</th>
+                <th scope="col">Destinatario</th>
+                <th scope="col">Mensaje</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let n of notificaciones">
+                <td>
+                  <strong>#{{ n.citaId }}</strong>
+                  <small>{{ n.tipo }}</small>
+                </td>
+                <td class="recipient">{{ n.destinatario || 'Sin destinatario' }}</td>
+                <td class="message-cell">{{ n.mensaje }}</td>
+                <td class="date-cell">
+                  {{ n.fechaEnvio
+                      ? (n.fechaEnvio | date:'dd/MM/yyyy HH:mm')
+                      : 'Sin fecha' }}
+                </td>
+                <td>
+                  <span class="status"
+                        [class.sent]="n.estado === 'ENVIADO'"
+                        [class.pending]="n.estado === 'PENDIENTE'">
+                    {{ n.estado || 'Sin estado' }}
+                  </span>
+                </td>
+                <td>
+                  <button type="button" class="delete-button"
+                          *ngIf="n.id != null"
+                          (click)="eliminar(n.id!)"
+                          [attr.aria-label]="'Eliminar notificación ' + n.id">
+                    <i class="bi bi-trash" aria-hidden="true"></i>
+                    Eliminar
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</section>

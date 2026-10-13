@@ -1,150 +1,121 @@
-.patient-form-container {
-  padding: 30px;
-}
+.doctor-form-container { padding: 30px; }
 
 .page-header {
   margin-bottom: 25px;
-}
 
-.page-header h2 {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 5px;
+    color: #1f2937;
+  }
 
-  margin-bottom: 5px;
-
-  color: #1f2937;
-}
-
-.page-header h2 i {
-  color: #16a34a;
-}
-
-.page-header p {
-  color: #6b7280;
+  h2 i { color: #2563eb; }
+  p { color: #6b7280; margin: 0; }
 }
 
 .form-card {
-  background: white;
-
+  background: #fff;
   border-radius: 18px;
-
   padding: 30px;
-
-  box-shadow:
-    0 4px 20px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, .08);
 }
 
+fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+
 .form-grid {
-
   display: grid;
-
-  grid-template-columns:
-    repeat(auto-fit, minmax(300px, 1fr));
-
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 20px;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-}
 
-.form-group label {
-
-  margin-bottom: 8px;
-
-  font-weight: 600;
-
-  color: #374151;
+  label { margin-bottom: 8px; font-weight: 600; color: #374151; }
 }
 
 .input-group {
   position: relative;
+
+  i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6b7280;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  input, select {
+    width: 100%;
+    min-width: 0;
+    padding: 12px 12px 12px 45px;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    font-size: 14px;
+    background: #fff;
+    color: #1f2937;
+    box-sizing: border-box;
+  }
+
+  input:focus, select:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, .15);
+  }
+
+  input:disabled, select:disabled { background: #f1f5f9; }
 }
 
-.input-group i {
-
-  position: absolute;
-
-  left: 15px;
-  top: 50%;
-
-  transform: translateY(-50%);
-
-  color: #6b7280;
-
-  z-index: 2;
-}
-
-.input-group input,
-.input-group select {
-
-  width: 100%;
-
-  padding: 12px 12px 12px 45px;
-
-  border: 1px solid #d1d5db;
-
+.form-error {
+  margin-bottom: 20px;
+  padding: 14px;
   border-radius: 10px;
-
-  font-size: 14px;
-
-  transition: all .3s ease;
-
-  box-sizing: border-box;
-}
-
-.input-group input:focus,
-.input-group select:focus {
-
-  outline: none;
-
-  border-color: #2563eb;
-
-  box-shadow:
-    0 0 0 4px rgba(37,99,235,0.15);
-}
-
-.full-width {
-  grid-column: 1 / -1;
+  background: #fff1f2;
+  color: #9f1239;
 }
 
 .button-group {
-
   margin-top: 30px;
-
   display: flex;
-
   justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.btn-primary, .btn-secondary {
+  padding: 12px 24px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+
+  &:disabled { opacity: .6; cursor: not-allowed; }
+  &:focus-visible { outline: 3px solid #93c5fd; outline-offset: 3px; }
 }
 
 .btn-primary {
-
   border: none;
-
   background: #2563eb;
+  color: #fff;
 
-  color: white;
-
-  padding: 12px 24px;
-
-  border-radius: 10px;
-
-  cursor: pointer;
-
-  font-size: 15px;
-
-  font-weight: 600;
-
-  transition: all .3s ease;
+  &:hover:not(:disabled) { background: #1d4ed8; }
+  i { margin-right: 8px; }
 }
 
-.btn-primary:hover {
-  background: #1d4ed8;
-  transform: translateY(-2px);
+.btn-secondary {
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  color: #475569;
 }
 
-.btn-primary i {
-  margin-right: 8px;
+@media (max-width: 700px) {
+  .doctor-form-container { padding: 18px; }
+  .form-card { padding: 20px; }
+  .form-grid { grid-template-columns: 1fr; }
 }
+

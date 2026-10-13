@@ -1,195 +1,83 @@
 <div class="container-fluid mt-4">
-
   <div class="doctor-card">
-
     <div class="header-section">
-
       <div>
-
         <h2>
-
-          <i class="bi bi-person-vcard-fill"></i>
-
+          <i class="bi bi-person-vcard-fill" aria-hidden="true"></i>
           Gestión de Médicos
-
         </h2>
-
-        <p>
-
-          Administración de médicos registrados
-
-        </p>
-
+        <p>Administración de médicos registrados</p>
       </div>
-
-
-      <button
-        class="btn btn-primary"
-        routerLink="/doctors/new">
-
-        <i class="bi bi-plus-circle"></i>
-
+      <button type="button" class="btn btn-primary" routerLink="/doctors/new">
+        <i class="bi bi-plus-circle" aria-hidden="true"></i>
         Nuevo Médico
-
       </button>
-
     </div>
 
-
+    <p *ngIf="loading" role="status">Cargando médicos...</p>
 
     <div class="table-responsive">
-
       <table class="table align-middle">
-
         <thead>
-
           <tr>
-
-            <th>ID</th>
-
-            <th>Médico</th>
-
-            <th>CMP</th>
-
-            <th>Especialidad</th>
-
-            <th>Estado</th>
-
-            <th>Acciones</th>
-
+            <th scope="col">ID</th>
+            <th scope="col">Médico</th>
+            <th scope="col">CMP</th>
+            <th scope="col">Especialidad</th>
+            <th scope="col">Teléfono</th>
+            <th scope="col">Email</th>
+            <th scope="col">Consultorio</th>
+            <th scope="col">Estado</th>
+            <th scope="col">Acciones</th>
           </tr>
-
         </thead>
-
-
-
         <tbody>
-
           <tr *ngFor="let m of medicos">
-
+            <td>#{{ m.id }}</td>
             <td>
-
-              #{{m.id}}
-
-            </td>
-
-
-            <td>
-
               <div class="doctor-cell">
-
-                <div class="avatar">
-
-                  {{m.nombres.charAt(0)}}
-
+                <div class="avatar" aria-hidden="true">
+                  {{ m.nombres.charAt(0) }}
                 </div>
-
-                <div>
-
-                  <strong>
-
-                    {{m.nombres}} {{m.apellidos}}
-
-                  </strong>
-
-                </div>
-
+                <strong>{{ m.nombres }} {{ m.apellidos }}</strong>
               </div>
-
             </td>
-
-
-
+            <td>{{ m.cmp }}</td>
+            <td>{{ m.especialidad }}</td>
+            <td class="phone-cell">{{ m.telefono || 'Sin registrar' }}</td>
+            <td class="email-cell">{{ m.email || 'Sin registrar' }}</td>
+            <td>{{ m.consultorio || 'Sin asignar' }}</td>
             <td>
-
-              {{m.cmp}}
-
-            </td>
-
-
-
-            <td>
-
-              {{m.especialidad}}
-
-            </td>
-
-
-
-            <td>
-
-              <span
-
-                class="badge"
-
-                [ngClass]="{
-
-                  'badge-active':m.estado=='ACTIVO',
-
-                  'badge-inactive':m.estado!='ACTIVO'
-
-                }">
-
-                {{m.estado}}
-
+              <span class="badge"
+                    [ngClass]="{
+                      'badge-active': m.estado === 'ACTIVO',
+                      'badge-inactive': m.estado !== 'ACTIVO'
+                    }">
+                {{ m.estado }}
               </span>
-
             </td>
-
-
-
             <td>
-
               <div class="actions">
-
-
-                <button
-
-                  class="btn btn-info btn-action"
-
-                  (click)="verDetalle(m.id!)">
-
-                  <i class="bi bi-eye"></i>
-
+                <button type="button" class="btn btn-info btn-action"
+                        (click)="verDetalle(m.id!)"
+                        title="Ver detalle" aria-label="Ver detalle del médico">
+                  <i class="bi bi-eye" aria-hidden="true"></i>
                 </button>
-
-
-
-                <button
-
-                  class="btn btn-warning btn-action"
-
-                  (click)="editar(m.id!)">
-
-                  <i class="bi bi-pencil"></i>
-
+                <button type="button" class="btn btn-warning btn-action"
+                        (click)="editar(m.id!)"
+                        title="Editar" aria-label="Editar médico">
+                  <i class="bi bi-pencil" aria-hidden="true"></i>
                 </button>
-
-
-
-                <button
-
-                  class="btn btn-danger btn-action"
-
-                  (click)="eliminar(m.id!)">
-
-                  <i class="bi bi-trash"></i>
-
+                <button type="button" class="btn btn-danger btn-action"
+                        (click)="eliminar(m.id!)"
+                        title="Eliminar" aria-label="Eliminar médico">
+                  <i class="bi bi-trash" aria-hidden="true"></i>
                 </button>
-
-
               </div>
-
             </td>
-
           </tr>
-
         </tbody>
-
       </table>
-
     </div>
-
   </div>
-
 </div>

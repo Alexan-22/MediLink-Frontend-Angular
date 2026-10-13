@@ -1,197 +1,128 @@
 <div class="doctor-form-container">
-
-    <div class="page-header">
-
-        <h2>
-
-            <i class="bi bi-person-vcard-fill"></i>
-
-            {{esEdicion ? 'Editar Médico' : 'Nuevo Médico'}}
-
-        </h2>
-
-        <p>
-
-            Complete la información del médico
-
-        </p>
-
-    </div>
-
-
-    <div class="form-card">
-
-        <form (ngSubmit)="guardar()">
-
-            <div class="form-grid">
-
-
-                <div class="form-group">
-
-                    <label>CMP</label>
-
-                    <div class="input-group">
-
-                        <i class="bi bi-patch-check-fill"></i>
-
-                        <input
-                            [(ngModel)]="medico.cmp"
-                            name="cmp"
-                            required>
-
-                    </div>
-
-                </div>
-
-
-
-                <div class="form-group">
-
-                    <label>Nombres</label>
-
-                    <div class="input-group">
-
-                        <i class="bi bi-person-fill"></i>
-
-                        <input
-                            [(ngModel)]="medico.nombres"
-                            name="nombres"
-                            required>
-
-                    </div>
-
-                </div>
-
-
-
-                <div class="form-group">
-
-                    <label>Apellidos</label>
-
-                    <div class="input-group">
-
-                        <i class="bi bi-person-badge-fill"></i>
-
-                        <input
-                            [(ngModel)]="medico.apellidos"
-                            name="apellidos"
-                            required>
-
-                    </div>
-
-                </div>
-
-
-
-                <div class="form-group">
-
-                    <label>Especialidad</label>
-
-                    <div class="input-group">
-
-                        <i class="bi bi-heart-pulse-fill"></i>
-
-                        <input
-                            [(ngModel)]="medico.especialidad"
-                            name="especialidad">
-
-                    </div>
-
-                </div>
-
-
-
-                <div class="form-group">
-
-                    <label>Horario Inicio</label>
-
-                    <div class="input-group">
-
-                        <i class="bi bi-clock-fill"></i>
-
-                        <input
-                            type="time"
-                            [(ngModel)]="medico.horarioInicio"
-                            name="horarioInicio">
-
-                    </div>
-
-                </div>
-
-
-
-                <div class="form-group">
-
-                    <label>Horario Fin</label>
-
-                    <div class="input-group">
-
-                        <i class="bi bi-clock-history"></i>
-
-                        <input
-                            type="time"
-                            [(ngModel)]="medico.horarioFin"
-                            name="horarioFin">
-
-                    </div>
-
-                </div>
-
-
-
-                <div class="form-group full-width">
-
-                    <label>Estado</label>
-
-                    <div class="input-group">
-
-                        <i class="bi bi-check-circle-fill"></i>
-
-                        <select
-                            [(ngModel)]="medico.estado"
-                            name="estado">
-
-                            <option value="ACTIVO">
-
-                                ACTIVO
-
-                            </option>
-
-                            <option value="INACTIVO">
-
-                                INACTIVO
-
-                            </option>
-
-                        </select>
-
-                    </div>
-
-                </div>
-
-
+  <header class="page-header">
+    <h2>
+      <i class="bi bi-person-vcard-fill" aria-hidden="true"></i>
+      {{ esEdicion ? 'Editar Médico' : 'Nuevo Médico' }}
+    </h2>
+    <p>Complete la información del médico. Los campos con * son obligatorios.</p>
+  </header>
+
+  <div class="form-card">
+    <p *ngIf="cargando" role="status">Cargando información...</p>
+    <div class="form-error" *ngIf="error" role="alert">{{ error }}</div>
+
+    <form #form="ngForm" (ngSubmit)="guardar(form)">
+      <fieldset [disabled]="cargando || guardando || errorCarga">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="cmp">CMP *</label>
+            <div class="input-group">
+              <i class="bi bi-patch-check-fill" aria-hidden="true"></i>
+              <input id="cmp" [(ngModel)]="medico.cmp"
+                     name="cmp" required placeholder="Ej. 900004">
             </div>
+          </div>
 
-
-
-            <div class="button-group">
-
-
-                <button
-                        type="submit"
-                        class="btn-primary">
-
-                    <i class="bi bi-save-fill"></i>
-
-                    {{esEdicion ? 'Actualizar Médico' : 'Guardar Médico'}}
-
-                </button>
-
-
+          <div class="form-group">
+            <label for="nombres">Nombres *</label>
+            <div class="input-group">
+              <i class="bi bi-person-fill" aria-hidden="true"></i>
+              <input id="nombres" [(ngModel)]="medico.nombres"
+                     name="nombres" required autocomplete="given-name">
             </div>
+          </div>
 
-        </form>
+          <div class="form-group">
+            <label for="apellidos">Apellidos *</label>
+            <div class="input-group">
+              <i class="bi bi-person-badge-fill" aria-hidden="true"></i>
+              <input id="apellidos" [(ngModel)]="medico.apellidos"
+                     name="apellidos" required autocomplete="family-name">
+            </div>
+          </div>
 
-    </div>
+          <div class="form-group">
+            <label for="especialidad">Especialidad *</label>
+            <div class="input-group">
+              <i class="bi bi-heart-pulse-fill" aria-hidden="true"></i>
+              <input id="especialidad" [(ngModel)]="medico.especialidad"
+                     name="especialidad" required>
+            </div>
+          </div>
 
+          <div class="form-group">
+            <label for="telefono">Teléfono</label>
+            <div class="input-group">
+              <i class="bi bi-telephone-fill" aria-hidden="true"></i>
+              <input id="telefono" type="tel" [(ngModel)]="medico.telefono"
+                     name="telefono" autocomplete="tel" placeholder="Ej. 900000005">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Correo electrónico</label>
+            <div class="input-group">
+              <i class="bi bi-envelope-fill" aria-hidden="true"></i>
+              <input id="email" type="email" email [(ngModel)]="medico.email"
+                     name="email" autocomplete="email"
+                     placeholder="medico@example.com">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="consultorio">Consultorio</label>
+            <div class="input-group">
+              <i class="bi bi-door-open-fill" aria-hidden="true"></i>
+              <input id="consultorio" [(ngModel)]="medico.consultorio"
+                     name="consultorio" placeholder="Ej. 104">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="horarioInicio">Horario de inicio *</label>
+            <div class="input-group">
+              <i class="bi bi-clock-fill" aria-hidden="true"></i>
+              <input id="horarioInicio" type="time" step="60"
+                     [(ngModel)]="medico.horarioInicio"
+                     name="horarioInicio" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="horarioFin">Horario de fin *</label>
+            <div class="input-group">
+              <i class="bi bi-clock-history" aria-hidden="true"></i>
+              <input id="horarioFin" type="time" step="60"
+                     [(ngModel)]="medico.horarioFin"
+                     name="horarioFin" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="estado">Estado *</label>
+            <div class="input-group">
+              <i class="bi bi-check-circle-fill" aria-hidden="true"></i>
+              <select id="estado" [(ngModel)]="medico.estado" name="estado" required>
+                <option value="ACTIVO">ACTIVO</option>
+                <option value="INACTIVO">INACTIVO</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+
+      <div class="button-group">
+        <button type="button" class="btn-secondary"
+                (click)="cancelar()" [disabled]="guardando">
+          Volver
+        </button>
+        <button type="submit" class="btn-primary"
+                [disabled]="cargando || guardando || errorCarga">
+          <i class="bi bi-save-fill" aria-hidden="true"></i>
+          {{ guardando ? 'Guardando...'
+            : esEdicion ? 'Actualizar Médico' : 'Guardar Médico' }}
+        </button>
+      </div>
+    </form>
+  </div>
 </div>

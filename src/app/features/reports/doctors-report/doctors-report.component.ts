@@ -9,8 +9,34 @@ import { Medico } from '../../../core/models/medico.model';
 })
 export class DoctorsReportComponent implements OnInit {
   medicos: Medico[] = [];
-  constructor(private doctorService: DoctorService) { }
+  cargando = false;
+  error = '';
+
+  constructor(private doctorService: DoctorService) {}
+
   ngOnInit(): void {
-    this.doctorService.listar().subscribe(data => this.medicos = data);
+    this.cargar();
+  }
+
+  cargar(): void {
+    if (this.cargando) return;
+
+    this.cargando = true;
+    this.error = '';
+
+    this.doctorService.listar().subscribe({
+      next: data => {
+        this.medicos = data || [];
+        this.cargando = false;
+      },
+      error: () => {
+        this.cargando = false;
+        this.error = 'No se pudo cargar el reporte de médicos.';
+      }
+    });
+  }
+
+  get activos(): number {
+    return this.medicos.filter(m => m.estado === 'ACTIVO').length;
   }
 }

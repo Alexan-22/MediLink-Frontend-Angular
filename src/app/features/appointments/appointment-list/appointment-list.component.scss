@@ -182,3 +182,51 @@ justify-content:center;
 }
 
 }
+/* Colores de las acciones según su icono */
+button:has(.bi-eye),
+button:has(.bi-pencil),
+button:has(.bi-check-circle),
+button:has(.bi-check-circle-fill),
+button:has(.bi-x-circle),
+button:has(.bi-x-circle-fill),
+button:has(.bi-person-x),
+button:has(.bi-person-x-fill) {
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  transition: filter .2s;
+
+  i { color: inherit; }
+
+  &:hover:not(:disabled) { filter: brightness(.88); }
+
+  &:focus-visible {
+    outline: 3px solid #93c5fd;
+    outline-offset: 3px;
+  }
+
+  &:disabled { opacity: .5; cursor: not-allowed; }
+}
+
+button:has(.bi-eye) {
+  background: #0ea5e9;
+}
+
+button:has(.bi-pencil) {
+  background: #2563eb;
+}
+
+button:has(.bi-check-circle),
+button:has(.bi-check-circle-fill) {
+  background: #16a34a;
+}
+
+button:has(.bi-x-circle),
+button:has(.bi-x-circle-fill) {
+  background: #ef4444;
+}
+
+button:has(.bi-person-x),
+button:has(.bi-person-x-fill) {
+  background: #c2410c;
+}

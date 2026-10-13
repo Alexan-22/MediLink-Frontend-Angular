@@ -1,125 +1,141 @@
 <div class="dashboard">
+  <header class="dashboard-header">
+    <h1>{{ role === 'PACIENTE' ? 'Mi perfil' : 'Panel de Control' }}</h1>
+    <p>{{ role === 'PACIENTE'
+      ? 'Consulta tus datos personales registrados en MediCitas.'
+      : 'Resumen general del sistema Medicitas' }}</p>
+  </header>
 
-  <div class="dashboard-header">
-    <h1>Panel de Control</h1>
-    <p>Resumen general del sistema Medicitas</p>
-  </div>
-  <div class="user-role">
+  <!-- Perfil del paciente -->
+  <section *ngIf="role === 'PACIENTE'; else panelPersonal">
+    <div class="profile-message" *ngIf="cargandoPerfil" role="status">
+      Cargando tu perfil...
+    </div>
 
-  <span>
+    <div class="profile-message profile-error" *ngIf="errorPerfil" role="alert">
+      <p>{{ errorPerfil }}</p>
+      <button type="button" class="btn btn-outline-primary"
+              (click)="cargarPerfil()" [disabled]="cargandoPerfil">
+        Reintentar
+      </button>
+    </div>
 
-      Bienvenido
+    <article class="patient-profile" *ngIf="paciente as p">
+      <header class="profile-heading">
+        <div class="profile-avatar" aria-hidden="true">
+          <i class="bi bi-person-fill"></i>
+        </div>
+        <div class="profile-name">
+          <span class="profile-caption">Bienvenido a MediCitas</span>
+          <h2>{{ p.nombres }} {{ p.apellidos }}</h2>
+          <p>Tu información personal</p>
+        </div>
+        <span class="profile-status">{{ p.estado }}</span>
+      </header>
 
-      <strong>
+      <dl class="profile-details">
+        <div><dt>DNI</dt><dd>{{ p.dni || 'No registrado' }}</dd></div>
+        <div>
+          <dt>Fecha de nacimiento</dt>
+          <dd>{{ p.fechaNacimiento
+            ? (p.fechaNacimiento | date:'dd/MM/yyyy')
+            : 'No registrada' }}</dd>
+        </div>
+        <div>
+          <dt>Sexo</dt>
+          <dd>{{ p.sexo === 'M' ? 'Masculino'
+            : p.sexo === 'F' ? 'Femenino'
+            : (p.sexo || 'No registrado') }}</dd>
+        </div>
+        <div><dt>Teléfono</dt><dd>{{ p.telefono || 'No registrado' }}</dd></div>
+        <div><dt>Correo electrónico</dt><dd>{{ p.email || 'No registrado' }}</dd></div>
+        <div><dt>Dirección</dt><dd>{{ p.direccion || 'No registrada' }}</dd></div>
+        <div><dt>Tipo de sangre</dt><dd>{{ p.tipoSangre || 'No registrado' }}</dd></div>
+        <div><dt>Alergias</dt><dd>{{ p.alergias || 'No registradas' }}</dd></div>
+      </dl>
 
-          {{ role }}
+      <footer class="profile-footer">
+        <i class="bi bi-info-circle" aria-hidden="true"></i>
+        Para corregir tus datos, comunícate con recepción.
+      </footer>
+    </article>
+  </section>
 
-      </strong>
+  <!-- Panel de los demás roles -->
+  <ng-template #panelPersonal>
+    <div class="user-role">
+      <span>Bienvenido <strong>{{ role }}</strong></span>
+    </div>
 
-  </span>
+    <div class="stats-grid">
+      <div *ngIf="role === 'ADMIN' || role === 'RECEPCIONISTA'" class="stat-card">
+        <div class="card-header">
+          <i class="bi bi-people-fill"></i><span>Pacientes</span>
+        </div>
+        <div class="card-number">{{ general.totalPacientes }}</div>
+      </div>
 
+      <div *ngIf="role === 'ADMIN' || role === 'RECEPCIONISTA'" class="stat-card">
+        <div class="card-header">
+          <i class="bi bi-heart-pulse-fill"></i><span>Médicos</span>
+        </div>
+        <div class="card-number">{{ general.totalMedicos }}</div>
+      </div>
+
+      <div *ngIf="role === 'ADMIN' || role === 'RECEPCIONISTA'" class="stat-card">
+        <div class="card-header">
+          <i class="bi bi-calendar-check-fill"></i><span>Citas</span>
+        </div>
+        <div class="card-number">{{ general.totalCitas }}</div>
+      </div>
+
+      <div *ngIf="role === 'ADMIN'" class="stat-card">
+        <div class="card-header">
+          <i class="bi bi-bell-fill"></i><span>Notificaciones</span>
+        </div>
+        <div class="card-number">{{ general.totalNotificaciones }}</div>
+      </div>
+    </div>
+
+    <div class="activity-grid">
+      <div *ngIf="role === 'ADMIN' || role === 'RECEPCIONISTA' || role === 'ENFERMERA'"
+           class="stat-card">
+        <div class="card-header">
+          <i class="bi bi-person-check-fill"></i><span>Pacientes Activos</span>
+        </div>
+        <div class="card-number">{{ activos.pacientesActivos }}</div>
+      </div>
+
+      <div *ngIf="role === 'ADMIN'" class="stat-card">
+        <div class="card-header">
+          <i class="bi bi-hospital-fill"></i><span>Médicos Activos</span>
+        </div>
+        <div class="card-number">{{ activos.medicosActivos }}</div>
+      </div>
+    </div>
+
+    <div class="estado-card"
+         *ngIf="role === 'ADMIN' || role === 'MEDICO' || role === 'ENFERMERA'">
+      <h3>Estado de Citas</h3>
+      <div class="estado-grid">
+        <div class="estado-item">
+          <i class="bi bi-calendar-event"></i><span>Programadas</span>
+          <strong>{{ estadoCitas.programadas }}</strong>
+        </div>
+        <div class="estado-item">
+          <i class="bi bi-check-circle-fill"></i><span>Atendidas</span>
+          <strong>{{ estadoCitas.atendidas }}</strong>
+        </div>
+        <div class="estado-item">
+          <i class="bi bi-x-circle-fill"></i><span>Canceladas</span>
+          <strong>{{ estadoCitas.canceladas }}</strong>
+        </div>
+        <div class="estado-item">
+          <i class="bi bi-person-x-fill"></i><span>No Asistió</span>
+          <strong>{{ estadoCitas.noAsistio }}</strong>
+        </div>
+      </div>
+    </div>
+  </ng-template>
 </div>
 
-  <div class="stats-grid">
-
-    <div *ngIf="role!='MEDICO'" class="stat-card">
-      <div class="card-header">
-        <i class="bi bi-people-fill"></i>
-        <span>Pacientes</span>
-      </div>
-      <div class="card-number">
-        {{ general.totalPacientes }}
-      </div>
-    </div>
-
-    <div *ngIf="role!='MEDICO'" class="stat-card">
-      <div class="card-header">
-        <i class="bi bi-heart-pulse-fill"></i>
-        <span>Médicos</span>
-      </div>
-      <div class="card-number">
-        {{ general.totalMedicos }}
-      </div>
-    </div>
-
-    <div class="stat-card">
-      <div class="card-header">
-        <i class="bi bi-calendar-check-fill"></i>
-        <span>Citas</span>
-      </div>
-      <div class="card-number">
-        {{ general.totalCitas }}
-      </div>
-    </div>
-
-    <div *ngIf="role=='ADMIN'" class="stat-card">
-      <div class="card-header">
-        <i class="bi bi-bell-fill"></i>
-        <span>Notificaciones</span>
-      </div>
-      <div class="card-number">
-        {{ general.totalNotificaciones }}
-      </div>
-    </div>
-
-  </div>
-
-  <div class="activity-grid">
-
-    <div *ngIf="role!='MEDICO'" class="stat-card">
-      <div class="card-header">
-        <i class="bi bi-person-check-fill"></i>
-        <span>Pacientes Activos</span>
-      </div>
-      <div class="card-number">
-        {{ activos.pacientesActivos }}
-      </div>
-    </div>
-
-    <div *ngIf="role=='ADMIN'" class="stat-card">
-      <div class="card-header">
-        <i class="bi bi-hospital-fill"></i>
-        <span>Médicos Activos</span>
-      </div>
-      <div class="card-number">
-        {{ activos.medicosActivos }}
-      </div>
-    </div>
-
-  </div>
-
-  <div class="estado-card">
-
-    <h3>Estado de Citas</h3>
-
-    <div class="estado-grid">
-
-      <div class="estado-item">
-        <i class="bi bi-calendar-event"></i>
-        <span>Programadas</span>
-        <strong>{{ estadoCitas.programadas }}</strong>
-      </div>
-
-      <div class="estado-item">
-        <i class="bi bi-check-circle-fill"></i>
-        <span>Atendidas</span>
-        <strong>{{ estadoCitas.atendidas }}</strong>
-      </div>
-
-      <div class="estado-item">
-        <i class="bi bi-x-circle-fill"></i>
-        <span>Canceladas</span>
-        <strong>{{ estadoCitas.canceladas }}</strong>
-      </div>
-
-      <div class="estado-item">
-        <i class="bi bi-person-x-fill"></i>
-        <span>No Asistió</span>
-        <strong>{{ estadoCitas.noAsistio }}</strong>
-      </div>
-
-    </div>
-
-  </div>
-
-</div>

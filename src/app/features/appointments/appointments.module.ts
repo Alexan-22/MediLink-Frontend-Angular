@@ -6,18 +6,16 @@ import { AppointmentListComponent } from './appointment-list/appointment-list.co
 import { AppointmentFormComponent } from './appointment-form/appointment-form.component';
 import { AppointmentCalendarComponent } from './appointment-calendar/appointment-calendar.component';
 import { AppointmentDetailComponent } from './appointment-detail/appointment-detail.component';
+import { MyAppointmentsComponent } from './my-appointments/my-appointments.component';
 
 @NgModule({
   declarations: [
     AppointmentListComponent,
     AppointmentFormComponent,
     AppointmentCalendarComponent,
-    AppointmentDetailComponent
+    AppointmentDetailComponent,
+    MyAppointmentsComponent
   ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    AppointmentsRoutingModule
-  ]
+  imports: [CommonModule, FormsModule, AppointmentsRoutingModule]
 })
-export class AppointmentsModule { }
+export class AppointmentsModule {}
