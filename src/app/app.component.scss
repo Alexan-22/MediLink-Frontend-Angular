@@ -1,16 +1,123 @@
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
 .app-container {
   display: flex;
   height: 100vh;
+  height: 100dvh;
   overflow: hidden;
+  background: #f4f7fb;
+}
 
-  .main-content {
+.sidebar-panel {
+  display: block;
+  flex: 0 0 250px;
+  width: 250px;
+  height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: #263b50;
+}
+
+.main-content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  min-width: 0;
+  background: #fff;
+  border-bottom: 1px solid #e2e8f0;
+
+  app-header {
+    display: block;
     flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
+    min-width: 0;
+  }
+}
 
-    .content-wrapper {
-      padding: 20px;
+.content-wrapper {
+  flex: 1;
+  min-width: 0;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.menu-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  margin-left: 16px;
+  padding: 0;
+  border: 1px solid #dbeafe;
+  border-radius: 12px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  cursor: pointer;
+
+  i { font-size: 28px; }
+
+  &:hover { background: #dbeafe; }
+
+  &:focus-visible {
+    outline: 3px solid #93c5fd;
+    outline-offset: 3px;
+  }
+}
+
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: rgba(15, 23, 42, .5);
+  cursor: pointer;
+}
+
+@media (max-width: 1024px) {
+  .sidebar-panel {
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 1101;
+    width: min(280px, 85vw);
+    height: 100vh;
+    height: 100dvh;
+    visibility: hidden;
+    transform: translateX(-100%);
+    transition: transform .25s ease, visibility .25s;
+
+    &.is-open {
+      visibility: visible;
+      transform: translateX(0);
+      box-shadow: 12px 0 35px rgba(15, 23, 42, .2);
     }
   }
+
+  .menu-toggle { display: inline-flex; }
+  .content-wrapper { padding: 20px; }
+}
+
+@media (max-width: 600px) {
+  .topbar { align-items: flex-start; }
+  .menu-toggle { margin: 20px 0 0 10px; width: 40px; height: 40px; }
+  .content-wrapper { padding: 14px 10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar-panel { transition: none; }
 }

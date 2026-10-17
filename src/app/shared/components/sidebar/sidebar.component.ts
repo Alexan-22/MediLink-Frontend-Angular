@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
 
 interface MenuItem {
@@ -13,35 +13,21 @@ interface MenuItem {
   styleUrls: ['./sidebar.component.scss']
 })
 export class SidebarComponent implements OnInit {
+  @Output() navegacion = new EventEmitter<void>();
+
   menuItems: MenuItem[] = [];
   username = '';
   role = '';
 
   private readonly items: Record<string, MenuItem> = {
-    dashboard: {
-      path: '/dashboard', label: 'Dashboard', icon: 'dashboard'
-    },
-    patients: {
-      path: '/patients', label: 'Pacientes', icon: 'people'
-    },
-    doctors: {
-      path: '/doctors', label: 'Médicos', icon: 'medical_services'
-    },
-    appointments: {
-      path: '/appointments', label: 'Citas', icon: 'calendar_today'
-    },
-    myAppointments: {
-      path: '/appointments/me', label: 'Mis citas', icon: 'event_note'
-    },
-    notifications: {
-      path: '/notifications', label: 'Notificaciones', icon: 'notifications'
-    },
-    reports: {
-      path: '/reports', label: 'Reportes', icon: 'bar_chart'
-    },
-    users: {
-      path: '/users', label: 'Usuarios', icon: 'manage_accounts'
-    }
+    dashboard: { path: '/dashboard', label: 'Dashboard', icon: 'dashboard' },
+    patients: { path: '/patients', label: 'Pacientes', icon: 'people' },
+    doctors: { path: '/doctors', label: 'Médicos', icon: 'medical_services' },
+    appointments: { path: '/appointments', label: 'Citas', icon: 'calendar_today' },
+    myAppointments: { path: '/appointments/me', label: 'Mis citas', icon: 'event_note' },
+    notifications: { path: '/notifications', label: 'Notificaciones', icon: 'notifications' },
+    reports: { path: '/reports', label: 'Reportes', icon: 'bar_chart' },
+    users: { path: '/users', label: 'Usuarios', icon: 'manage_accounts' }
   };
 
   constructor(private authService: AuthService) {}
@@ -55,11 +41,9 @@ export class SidebarComponent implements OnInit {
         'dashboard', 'patients', 'doctors', 'appointments',
         'notifications', 'reports', 'users'
       ],
-      RECEPCIONISTA: [
-        'dashboard', 'patients', 'doctors', 'appointments', 'notifications'
-      ],
-      MEDICO: ['dashboard', 'appointments', 'notifications'],
-      ENFERMERA: ['dashboard', 'patients', 'appointments', 'notifications'],
+      RECEPCIONISTA: ['dashboard', 'patients', 'doctors', 'appointments'],
+      MEDICO: ['dashboard', 'appointments'],
+      ENFERMERA: ['dashboard', 'patients', 'appointments'],
       PACIENTE: ['dashboard', 'myAppointments']
     };
 
@@ -79,7 +63,10 @@ export class SidebarComponent implements OnInit {
       ENFERMERA: 'Enfermera',
       PACIENTE: 'Paciente'
     };
-
     return nombres[this.role] || 'Usuario';
+  }
+
+  cerrarMenu(): void {
+    this.navegacion.emit();
   }
 }

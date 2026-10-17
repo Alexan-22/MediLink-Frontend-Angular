@@ -30,4 +30,7 @@ export class PatientService {
   miPerfil(): Observable<Paciente> {
   return this.http.get<Paciente>(`${this.apiUrl}/me`);
   }
+  crearMiPerfil(datos: Omit<Paciente, 'id' | 'usuarioId' | 'estado' | 'fechaRegistro'>): Observable<Paciente> {
+  return this.http.post<Paciente>(`${this.apiUrl}/me`, datos);
+  }
 }

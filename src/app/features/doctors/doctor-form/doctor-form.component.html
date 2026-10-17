@@ -12,14 +12,14 @@
     <div class="form-error" *ngIf="error" role="alert">{{ error }}</div>
 
     <form #form="ngForm" (ngSubmit)="guardar(form)">
-      <fieldset [disabled]="cargando || guardando || errorCarga">
+      <fieldset [disabled]="cargando || guardando || vinculando || errorCarga">
         <div class="form-grid">
           <div class="form-group">
             <label for="cmp">CMP *</label>
             <div class="input-group">
               <i class="bi bi-patch-check-fill" aria-hidden="true"></i>
-              <input id="cmp" [(ngModel)]="medico.cmp"
-                     name="cmp" required placeholder="Ej. 900004">
+              <input id="cmp" name="cmp" [(ngModel)]="medico.cmp"
+                     required placeholder="Ej. 900006">
             </div>
           </div>
 
@@ -27,8 +27,8 @@
             <label for="nombres">Nombres *</label>
             <div class="input-group">
               <i class="bi bi-person-fill" aria-hidden="true"></i>
-              <input id="nombres" [(ngModel)]="medico.nombres"
-                     name="nombres" required autocomplete="given-name">
+              <input id="nombres" name="nombres" [(ngModel)]="medico.nombres"
+                     required autocomplete="given-name">
             </div>
           </div>
 
@@ -36,8 +36,8 @@
             <label for="apellidos">Apellidos *</label>
             <div class="input-group">
               <i class="bi bi-person-badge-fill" aria-hidden="true"></i>
-              <input id="apellidos" [(ngModel)]="medico.apellidos"
-                     name="apellidos" required autocomplete="family-name">
+              <input id="apellidos" name="apellidos" [(ngModel)]="medico.apellidos"
+                     required autocomplete="family-name">
             </div>
           </div>
 
@@ -45,8 +45,8 @@
             <label for="especialidad">Especialidad *</label>
             <div class="input-group">
               <i class="bi bi-heart-pulse-fill" aria-hidden="true"></i>
-              <input id="especialidad" [(ngModel)]="medico.especialidad"
-                     name="especialidad" required>
+              <input id="especialidad" name="especialidad"
+                     [(ngModel)]="medico.especialidad" required>
             </div>
           </div>
 
@@ -54,8 +54,9 @@
             <label for="telefono">Teléfono</label>
             <div class="input-group">
               <i class="bi bi-telephone-fill" aria-hidden="true"></i>
-              <input id="telefono" type="tel" [(ngModel)]="medico.telefono"
-                     name="telefono" autocomplete="tel" placeholder="Ej. 900000005">
+              <input id="telefono" type="tel" name="telefono"
+                     [(ngModel)]="medico.telefono"
+                     autocomplete="tel" placeholder="Ej. 900000006">
             </div>
           </div>
 
@@ -63,9 +64,9 @@
             <label for="email">Correo electrónico</label>
             <div class="input-group">
               <i class="bi bi-envelope-fill" aria-hidden="true"></i>
-              <input id="email" type="email" email [(ngModel)]="medico.email"
-                     name="email" autocomplete="email"
-                     placeholder="medico@example.com">
+              <input id="email" type="email" name="email" email
+                     [(ngModel)]="medico.email"
+                     autocomplete="email" placeholder="medico@example.com">
             </div>
           </div>
 
@@ -73,8 +74,8 @@
             <label for="consultorio">Consultorio</label>
             <div class="input-group">
               <i class="bi bi-door-open-fill" aria-hidden="true"></i>
-              <input id="consultorio" [(ngModel)]="medico.consultorio"
-                     name="consultorio" placeholder="Ej. 104">
+              <input id="consultorio" name="consultorio"
+                     [(ngModel)]="medico.consultorio" placeholder="Ej. 106">
             </div>
           </div>
 
@@ -83,8 +84,7 @@
             <div class="input-group">
               <i class="bi bi-clock-fill" aria-hidden="true"></i>
               <input id="horarioInicio" type="time" step="60"
-                     [(ngModel)]="medico.horarioInicio"
-                     name="horarioInicio" required>
+                     name="horarioInicio" [(ngModel)]="medico.horarioInicio" required>
             </div>
           </div>
 
@@ -93,8 +93,7 @@
             <div class="input-group">
               <i class="bi bi-clock-history" aria-hidden="true"></i>
               <input id="horarioFin" type="time" step="60"
-                     [(ngModel)]="medico.horarioFin"
-                     name="horarioFin" required>
+                     name="horarioFin" [(ngModel)]="medico.horarioFin" required>
             </div>
           </div>
 
@@ -102,7 +101,7 @@
             <label for="estado">Estado *</label>
             <div class="input-group">
               <i class="bi bi-check-circle-fill" aria-hidden="true"></i>
-              <select id="estado" [(ngModel)]="medico.estado" name="estado" required>
+              <select id="estado" name="estado" [(ngModel)]="medico.estado" required>
                 <option value="ACTIVO">ACTIVO</option>
                 <option value="INACTIVO">INACTIVO</option>
               </select>
@@ -113,16 +112,91 @@
 
       <div class="button-group">
         <button type="button" class="btn-secondary"
-                (click)="cancelar()" [disabled]="guardando">
+                (click)="cancelar()" [disabled]="guardando || vinculando">
           Volver
         </button>
+
         <button type="submit" class="btn-primary"
-                [disabled]="cargando || guardando || errorCarga">
+                [disabled]="cargando || guardando || vinculando || errorCarga">
           <i class="bi bi-save-fill" aria-hidden="true"></i>
           {{ guardando ? 'Guardando...'
             : esEdicion ? 'Actualizar Médico' : 'Guardar Médico' }}
         </button>
       </div>
     </form>
+
+    <section class="account-link" *ngIf="esAdmin && !cargando && !errorCarga">
+      <div class="account-link-heading">
+        <span class="account-link-icon">
+          <i class="bi bi-person-lock" aria-hidden="true"></i>
+        </span>
+        <div>
+          <h3>Cuenta de acceso</h3>
+          <p>Vincula la ficha con la cuenta que utilizará este médico.</p>
+        </div>
+      </div>
+
+      <p class="link-note" *ngIf="!esEdicion">
+        Primero guarda el médico. Después abre Editar para vincular su cuenta.
+      </p>
+
+      <ng-container *ngIf="esEdicion">
+        <p class="link-success" *ngIf="cuentaVinculada" role="status">
+          <i class="bi bi-check-circle-fill" aria-hidden="true"></i>
+          Cuenta vinculada · ID de usuario: {{ medico.usuarioId }}
+        </p>
+
+        <p class="link-success" *ngIf="mensajeVinculo" role="status">
+          {{ mensajeVinculo }}
+        </p>
+
+        <div *ngIf="!cuentaVinculada">
+          <p *ngIf="cargandoCuentas" role="status">
+            Cargando cuentas médicas...
+          </p>
+
+          <div class="link-controls" *ngIf="!cargandoCuentas">
+            <div class="form-group">
+              <label for="usuarioMedico">Usuario con rol MÉDICO</label>
+              <div class="input-group">
+                <i class="bi bi-person-badge" aria-hidden="true"></i>
+                <select id="usuarioMedico"
+                        [(ngModel)]="usuarioSeleccionado"
+                        [ngModelOptions]="{ standalone: true }"
+                        [disabled]="guardando || vinculando">
+                  <option [ngValue]="null">Selecciona una cuenta</option>
+                  <option *ngFor="let usuario of usuariosMedicos"
+                          [ngValue]="usuario.id">
+                    {{ usuario.username }} · ID {{ usuario.id }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <button type="button" class="btn-primary"
+                    (click)="vincularCuenta()"
+                    [disabled]="usuarioSeleccionado == null || guardando || vinculando">
+              <i class="bi bi-link-45deg" aria-hidden="true"></i>
+              {{ vinculando ? 'Vinculando...' : 'Vincular cuenta' }}
+            </button>
+          </div>
+
+          <p class="link-note" *ngIf="!cargandoCuentas && !usuariosMedicos.length">
+            No hay cuentas médicas disponibles.
+            Crea una desde Usuarios con rol MEDICO.
+          </p>
+
+          <p class="form-error" *ngIf="errorVinculo" role="alert">
+            {{ errorVinculo }}
+          </p>
+
+          <button *ngIf="errorVinculo" type="button" class="btn-secondary"
+                  (click)="cargarCuentas()"
+                  [disabled]="cargandoCuentas || guardando || vinculando">
+            Actualizar cuentas
+          </button>
+        </div>
+      </ng-container>
+    </section>
   </div>
 </div>

@@ -27,4 +27,13 @@ export class DoctorService {
   contarActivos(): Observable<number> {
     return this.http.get<number>(`${this.apiUrl}/count/activos`);
   }
+  miPerfil(): Observable<Medico> {
+  return this.http.get<Medico>(`${this.apiUrl}/me`);
+}
+
+vincularUsuario(medicoId: number, usuarioId: number): Observable<Medico> {
+  return this.http.put<Medico>(`${this.apiUrl}/${medicoId}/usuario`, {
+    usuarioId
+  });
+}
 }

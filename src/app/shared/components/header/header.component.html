@@ -1,14 +1,39 @@
 <header class="app-header">
-  <div class="logo">
-    <h2>Medicitas</h2>
-  </div>
+  <a class="brand" routerLink="/dashboard" aria-label="MediLink, ir al inicio">
+  <img src="assets/images/medilink-logo.png"
+       alt="MediLink — Sistema de Gestión Médica"
+       class="brand-logo">
+  </a>
 
-  <div class="user-info">
-    <span>
-      Bienvenido, <strong>{{ authService.getUsername() }}</strong> ({{ authService.getRole() }})
-    </span>
+  <div class="header-actions">
+    <div class="account">
+      <span class="account-avatar" aria-hidden="true">{{ inicial }}</span>
+      <div class="account-text">
+        <span class="welcome">Bienvenido</span>
+        <strong [title]="username">{{ username }}</strong>
+        <span class="role-badge"
+              [class.role-admin]="role === 'ADMIN'"
+              [class.role-medico]="role === 'MEDICO'"
+              [class.role-paciente]="role === 'PACIENTE'"
+              [class.role-recepcion]="role === 'RECEPCIONISTA'"
+              [class.role-enfermera]="role === 'ENFERMERA'">
+          {{ nombreRol }}
+        </span>
+      </div>
+    </div>
 
-    <button routerLink="/profile" class="profile-btn">Mi Perfil</button>
-    <button (click)="logout()" class="logout-btn">Cerrar Sesión</button>
+    <div class="action-buttons">
+      <a routerLink="/profile" routerLinkActive="selected"
+         class="header-button profile-btn" aria-label="Ver mi perfil">
+        <i class="bi bi-person-circle" aria-hidden="true"></i>
+        <span>Mi perfil</span>
+      </a>
+
+      <button type="button" class="header-button logout-btn"
+              (click)="logout()" aria-label="Cerrar sesión">
+        <i class="bi bi-box-arrow-right" aria-hidden="true"></i>
+        <span>Cerrar sesión</span>
+      </button>
+    </div>
   </div>
 </header>

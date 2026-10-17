@@ -13,7 +13,12 @@ export class AuthService {
   constructor(private http: HttpClient, private tokenService: TokenService) { }
 
   register(request: RegisterRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/register`, request);
+  const datos: RegisterRequest = {
+    username: request.username.trim(),
+    password: request.password,
+    rol: 'PACIENTE'
+  };
+  return this.http.post<AuthResponse>(`${this.apiUrl}/register`, datos);
   }
 
   login(request: LoginRequest): Observable<AuthResponse> {

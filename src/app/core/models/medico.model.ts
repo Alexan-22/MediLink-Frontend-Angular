@@ -1,5 +1,6 @@
 export interface Medico {
   id?: number;
+  usuarioId?: number | null;
   cmp: string;
   nombres: string;
   apellidos: string;

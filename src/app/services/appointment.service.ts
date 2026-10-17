@@ -63,4 +63,8 @@ export class AppointmentService {
       `${this.baseUrl}/disponibles/${medicoId}/${fecha}`
     );
   }
+
+  misCitasMedico(): Observable<CitaDetalleDTO[]> {
+  return this.http.get<CitaDetalleDTO[]>(`${this.baseUrl}/medico/me`);
+  }
 }

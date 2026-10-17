@@ -230,3 +230,58 @@ button:has(.bi-person-x),
 button:has(.bi-person-x-fill) {
   background: #c2410c;
 }
+:host { display: block; min-width: 0; }
+
+.header-section { flex-wrap: wrap; gap: 16px; }
+.header-buttons { display: flex; flex-wrap: wrap; gap: 10px; }
+.record-count { color: #64748b; font-size: 13px; margin-bottom: 16px; }
+.nowrap { white-space: nowrap; }
+.table-responsive { overflow-x: auto; }
+.table { min-width: 850px; }
+.avatar { flex-shrink: 0; }
+
+.list-message {
+  padding: 20px;
+  color: #64748b;
+  text-align: center;
+}
+
+.list-error {
+  padding: 16px;
+  border-radius: 10px;
+  background: #fff1f2;
+  color: #9f1239;
+}
+
+.empty-state {
+  padding: 45px 20px;
+  border: 1px dashed #cbd5e1;
+  border-radius: 14px;
+  background: #f8fafc;
+  text-align: center;
+
+  > i { color: #2563eb; font-size: 38px; }
+  h3 { margin: 14px 0 8px; font-size: 19px; color: #334155; }
+  p { margin: 0; color: #64748b; }
+}
+
+.btn-action {
+  border: none;
+  color: #fff;
+
+  &:disabled { opacity: .5; cursor: not-allowed; }
+  &:hover:not(:disabled) { filter: brightness(.9); }
+  &:focus-visible { outline: 3px solid #93c5fd; outline-offset: 3px; }
+}
+
+.action-view { background: #0ea5e9; }
+.action-edit { background: #2563eb; }
+.action-attend { background: #16a34a; }
+.action-cancel { background: #ef4444; }
+.action-absent { background: #c2410c; }
+
+@media (max-width: 768px) {
+  .appointment-card { padding: 18px; }
+  .header-section h2 { font-size: 23px; }
+  .table td, .table thead th { padding: 12px; }
+}

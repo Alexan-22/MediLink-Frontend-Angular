@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
+import { forkJoin } from 'rxjs';
 import { DoctorService } from '../../../services/doctor.service';
+import { UserService } from '../../../services/user.service';
+import { AuthService } from '../../../services/auth.service';
 import { Medico } from '../../../core/models/medico.model';
+import { Usuario } from '../../../core/models/usuario.model';
 import { ToastService } from '../../../services/toast.service';
 
 @Component({
@@ -22,14 +26,32 @@ export class DoctorFormComponent implements OnInit {
   guardando = false;
   errorCarga = false;
   error = '';
+
+  usuariosMedicos: Usuario[] = [];
+  usuarioSeleccionado: number | null = null;
+  cargandoCuentas = false;
+  vinculando = false;
+  errorVinculo = '';
+  mensajeVinculo = '';
+
   private id = 0;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private doctorService: DoctorService,
+    private userService: UserService,
+    public authService: AuthService,
     private toast: ToastService
   ) {}
+
+  get esAdmin(): boolean {
+    return this.authService.getRole() === 'ADMIN';
+  }
+
+  get cuentaVinculada(): boolean {
+    return this.medico.usuarioId != null;
+  }
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
@@ -45,6 +67,7 @@ export class DoctorFormComponent implements OnInit {
     }
 
     this.cargando = true;
+
     this.doctorService.buscarPorId(this.id).subscribe({
       next: data => {
         this.cargando = false;
@@ -63,17 +86,92 @@ export class DoctorFormComponent implements OnInit {
           horarioInicio: data.horarioInicio || '',
           horarioFin: data.horarioFin || ''
         };
+
+        this.usuarioSeleccionado = data.usuarioId ?? null;
+
+        if (this.esAdmin && !this.cuentaVinculada) {
+          this.cargarCuentas();
+        }
       },
-      error: () => {
+      error: err => {
         this.cargando = false;
         this.errorCarga = true;
-        this.error = 'No se pudo cargar el médico.';
+        this.error = this.obtenerError(err, 'No se pudo cargar el médico.');
+      }
+    });
+  }
+
+  cargarCuentas(): void {
+    if (!this.esAdmin || this.cargandoCuentas || this.cuentaVinculada) return;
+
+    this.cargandoCuentas = true;
+    this.errorVinculo = '';
+
+    forkJoin({
+      usuarios: this.userService.listar(),
+      medicos: this.doctorService.listar()
+    }).subscribe({
+      next: ({ usuarios, medicos }) => {
+        const ocupados = new Set(
+          medicos
+            .filter(m => m.usuarioId != null)
+            .map(m => m.usuarioId)
+        );
+
+        this.usuariosMedicos = usuarios.filter(usuario =>
+          usuario.rol === 'MEDICO' &&
+          usuario.id != null &&
+          !ocupados.has(usuario.id)
+        );
+
+        this.cargandoCuentas = false;
+      },
+      error: err => {
+        this.cargandoCuentas = false;
+        this.errorVinculo = this.obtenerError(
+          err, 'No se pudieron cargar las cuentas médicas.'
+        );
+      }
+    });
+  }
+
+  vincularCuenta(): void {
+    if (!this.esAdmin || !this.esEdicion || this.errorCarga ||
+        this.cargando || this.guardando || this.vinculando ||
+        this.cargandoCuentas || this.cuentaVinculada) return;
+
+    const usuarioId = this.usuarioSeleccionado;
+
+    if (usuarioId == null ||
+        !this.usuariosMedicos.some(usuario => usuario.id === usuarioId)) {
+      this.errorVinculo = 'Selecciona una cuenta médica disponible.';
+      return;
+    }
+
+    this.errorVinculo = '';
+    this.mensajeVinculo = '';
+    this.vinculando = true;
+
+    this.doctorService.vincularUsuario(this.id, usuarioId).subscribe({
+      next: medico => {
+        // Actualizar solo la vinculación para conservar cambios sin guardar.
+        this.medico.usuarioId = medico.usuarioId;
+        this.usuarioSeleccionado = medico.usuarioId ?? null;
+        this.vinculando = false;
+        this.mensajeVinculo = 'La cuenta se vinculó correctamente.';
+        this.toast.show('Cuenta médica vinculada', 'success');
+      },
+      error: err => {
+        this.vinculando = false;
+        this.errorVinculo = this.obtenerError(
+          err, 'No se pudo vincular la cuenta.'
+        );
       }
     });
   }
 
   guardar(form: NgForm): void {
-    if (this.cargando || this.guardando || this.errorCarga) return;
+    if (this.cargando || this.guardando || this.vinculando || this.errorCarga) return;
 
     this.error = '';
 
@@ -102,6 +200,7 @@ export class DoctorFormComponent implements OnInit {
     };
 
     this.guardando = true;
+
     const solicitud = this.esEdicion
       ? this.doctorService.actualizar(this.id, datos)
       : this.doctorService.guardar(datos);
@@ -116,15 +215,21 @@ export class DoctorFormComponent implements OnInit {
       },
       error: err => {
         this.guardando = false;
-        const mensaje = err.error?.mensaje || err.error?.message;
-        this.error = typeof mensaje === 'string'
-          ? mensaje
-          : 'No se pudo guardar el médico. Revisa que el CMP no esté repetido.';
+        this.error = this.obtenerError(
+          err, 'No se pudo guardar el médico. Revisa que el CMP no esté repetido.'
+        );
       }
     });
   }
 
   cancelar(): void {
-    if (!this.guardando) this.router.navigate(['/doctors']);
+    if (!this.guardando && !this.vinculando) {
+      this.router.navigate(['/doctors']);
+    }
+  }
+
+  private obtenerError(err: any, texto: string): string {
+    const mensaje = err.error?.mensaje || err.error?.message;
+    return typeof mensaje === 'string' && mensaje.trim() ? mensaje : texto;
   }
 }

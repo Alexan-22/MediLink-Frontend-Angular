@@ -1,14 +1,38 @@
 <div class="app-container" *ngIf="authService.isLoggedIn(); else loginTemplate">
-  <app-sidebar></app-sidebar>
+  <button *ngIf="pantallaCompacta && menuAbierto"
+          type="button" class="sidebar-overlay"
+          aria-label="Cerrar menú" (click)="cerrarMenu()">
+  </button>
+
+  <app-sidebar id="main-sidebar" class="sidebar-panel"
+               [class.is-open]="menuAbierto"
+               [attr.inert]="pantallaCompacta && !menuAbierto ? '' : null"
+               (navegacion)="cerrarMenu()">
+  </app-sidebar>
+
   <div class="main-content">
-    <app-header></app-header>
-    <div class="content-wrapper">
-      <router-outlet></router-outlet>
+    <div class="topbar">
+      <button #menuButton type="button" class="menu-toggle"
+              aria-label="Abrir o cerrar menú"
+              aria-controls="main-sidebar"
+              [attr.aria-expanded]="menuAbierto"
+              (click)="alternarMenu()">
+        <i class="bi bi-list" aria-hidden="true"></i>
+      </button>
+
+      <app-header></app-header>
     </div>
+
+    <main class="content-wrapper"
+          [attr.inert]="pantallaCompacta && menuAbierto ? '' : null">
+      <router-outlet></router-outlet>
+    </main>
   </div>
 </div>
+
 <ng-template #loginTemplate>
   <router-outlet></router-outlet>
 </ng-template>
+
 <app-loading-spinner></app-loading-spinner>
 <app-toast-notifications></app-toast-notifications>

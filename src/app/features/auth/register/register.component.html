@@ -1,105 +1,65 @@
 <div class="register-container">
-
   <div class="register-card">
-
     <div class="logo-section">
-      <i class="bi bi-person-plus-fill"></i>
-      <h2>Crear Cuenta</h2>
-      <p>Registro de usuarios en Medicitas</p>
+      <i class="bi bi-person-plus-fill" aria-hidden="true"></i>
+      <h2>Crear cuenta de paciente</h2>
+      <p>Regístrate como paciente en MediLink</p>
     </div>
 
-    <form (ngSubmit)="onSubmit()">
-
+    <form #registroForm="ngForm" (ngSubmit)="onSubmit()">
       <div class="form-group">
-        <label>Usuario</label>
-
+        <label for="registerUsername">Usuario</label>
         <div class="input-group">
-          <i class="bi bi-person-fill"></i>
-          <input
-            type="text"
-            [(ngModel)]="registerData.username"
-            name="username"
-            placeholder="Ingrese un usuario"
-            required>
+          <i class="bi bi-person-fill" aria-hidden="true"></i>
+          <input id="registerUsername" type="text" name="username"
+                 [(ngModel)]="registerData.username"
+                 placeholder="Ingrese un usuario" autocomplete="username"
+                 [disabled]="guardando || !!successMessage" required>
         </div>
       </div>
 
       <div class="form-group">
-        <label>Contraseña</label>
-
+        <label for="registerPassword">Contraseña</label>
         <div class="input-group">
-          <i class="bi bi-lock-fill"></i>
-          <input
-            type="password"
-            [(ngModel)]="registerData.password"
-            name="password"
-            placeholder="Ingrese una contraseña"
-            required>
+          <i class="bi bi-lock-fill" aria-hidden="true"></i>
+          <input id="registerPassword" type="password" name="password"
+                 [(ngModel)]="registerData.password"
+                 placeholder="Mínimo 8 caracteres" autocomplete="new-password"
+                 [disabled]="guardando || !!successMessage" minlength="8" required>
         </div>
       </div>
 
       <div class="form-group">
-        <label>Rol</label>
-
+        <label for="confirmPassword">Confirmar contraseña</label>
         <div class="input-group">
-          <i class="bi bi-person-badge-fill"></i>
-
-          <select
-            [(ngModel)]="registerData.rol"
-            name="rol">
-
-            <option value="ADMIN">
-              Administrador
-            </option>
-
-            <option value="DOCTOR">
-              Médico
-            </option>
-
-            <option value="PACIENTE">
-              Paciente
-            </option>
-
-          </select>
+          <i class="bi bi-shield-lock-fill" aria-hidden="true"></i>
+          <input id="confirmPassword" type="password" name="confirmPassword"
+                 [(ngModel)]="confirmPassword"
+                 placeholder="Repita su contraseña" autocomplete="new-password"
+                 [disabled]="guardando || !!successMessage" minlength="8" required>
         </div>
       </div>
 
-      <button
-        type="submit"
-        class="btn-primary">
-
-        <i class="bi bi-person-plus-fill"></i>
-        Registrar Usuario
-
+      <button type="submit" class="btn-primary"
+              [disabled]="registroForm.invalid || guardando || !!successMessage">
+        <i class="bi bi-person-plus-fill" aria-hidden="true"></i>
+        {{ guardando ? 'Registrando...' : 'Crear cuenta de paciente' }}
       </button>
 
-      <p
-        class="success"
-        *ngIf="successMessage">
-
-        <i class="bi bi-check-circle-fill"></i>
+      <p class="success" *ngIf="successMessage" role="status">
+        <i class="bi bi-check-circle-fill" aria-hidden="true"></i>
         {{ successMessage }}
-
       </p>
 
-      <p
-        class="error"
-        *ngIf="errorMessage">
-
-        <i class="bi bi-exclamation-circle-fill"></i>
+      <p class="error" *ngIf="errorMessage" role="alert">
+        <i class="bi bi-exclamation-circle-fill" aria-hidden="true"></i>
         {{ errorMessage }}
-
       </p>
 
       <p class="login-link">
         ¿Ya tienes cuenta?
-        <a routerLink="/auth/login">
-          Iniciar Sesión
-        </a>
+        <a routerLink="/auth/login">Iniciar sesión</a>
       </p>
-
     </form>
-
   </div>
-
 </div>

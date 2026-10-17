@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { AuthService } from './services/auth.service';
 
 @Component({
@@ -7,6 +7,32 @@ import { AuthService } from './services/auth.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'medicitas-frontend';
-  constructor(public authService: AuthService) { }
+  title = 'medilink-frontend';
+  menuAbierto = false;
+  pantallaCompacta = window.innerWidth <= 1024;
+
+  @ViewChild('menuButton') menuButton?: ElementRef<HTMLButtonElement>;
+
+  constructor(public authService: AuthService) {}
+
+  alternarMenu(): void {
+    this.menuAbierto = !this.menuAbierto;
+  }
+
+  cerrarMenu(): void {
+    if (!this.menuAbierto) return;
+    this.menuAbierto = false;
+    this.menuButton?.nativeElement.focus();
+  }
+
+  @HostListener('window:resize')
+  ajustarPantalla(): void {
+    this.pantallaCompacta = window.innerWidth <= 1024;
+    if (!this.pantallaCompacta) this.menuAbierto = false;
+  }
+
+  @HostListener('document:keydown.escape')
+  cerrarConEscape(): void {
+    this.cerrarMenu();
+  }
 }
