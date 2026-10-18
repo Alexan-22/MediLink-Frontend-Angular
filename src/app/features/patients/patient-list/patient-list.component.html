@@ -1,108 +1,74 @@
 <div class="patients-container">
-
   <div class="page-header">
-
     <div>
       <h2>
-        <i class="bi bi-people-fill"></i>
+        <i class="bi bi-people-fill" aria-hidden="true"></i>
         Gestión de Pacientes
       </h2>
-
       <p>Administración de pacientes registrados</p>
     </div>
 
-    <button
-      routerLink="/patients/new"
-      class="btn-primary">
-
-      <i class="bi bi-plus-circle-fill"></i>
-      Nuevo Paciente
-
+    <button type="button" routerLink="/patients/new" class="btn-primary">
+      <i class="bi bi-plus-circle-fill" aria-hidden="true"></i> Nuevo Paciente
     </button>
-
   </div>
 
-  <div class="table-card">
+  <p *ngIf="loading" role="status">Cargando pacientes...</p>
+  <p *ngIf="error" class="alert alert-danger" role="alert">{{ error }}</p>
 
-    <table class="patients-table">
-
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>DNI</th>
-          <th>Nombres</th>
-          <th>Apellidos</th>
-          <th>Teléfono</th>
-          <th>Estado</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-
-      <tbody>
-
-        <tr *ngFor="let p of pacientes">
-
-          <td>{{ p.id }}</td>
-
-          <td>{{ p.dni }}</td>
-
-          <td>{{ p.nombres }}</td>
-
-          <td>{{ p.apellidos }}</td>
-
-          <td>{{ p.telefono }}</td>
-
-          <td>
-            <span
-              class="status-badge"
-              [ngClass]="{
-                'activo': p.estado === 'ACTIVO',
-                'inactivo': p.estado === 'INACTIVO'
-              }">
-
-              {{ p.estado }}
-
-            </span>
-          </td>
-
-          <td>
-
-            <div class="actions">
-
-              <button
-                (click)="verDetalle(p.id!)"
-                class="btn-view">
-
-                <i class="bi bi-eye-fill"></i>
-
-              </button>
-
-              <button
-                (click)="editar(p.id!)"
-                class="btn-edit">
-
-                <i class="bi bi-pencil-fill"></i>
-
-              </button>
-
-              <button
-                (click)="eliminar(p.id!)"
-                class="btn-delete">
-
-                <i class="bi bi-trash-fill"></i>
-
-              </button>
-
-            </div>
-
-          </td>
-
-        </tr>
-
-      </tbody>
-
-    </table>
-
+  <div class="table-card" *ngIf="!loading">
+    <div class="table-responsive">
+      <table class="patients-table">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">DNI</th>
+            <th scope="col">Nombres</th>
+            <th scope="col">Apellidos</th>
+            <th scope="col">Teléfono</th>
+            <th scope="col">Estado</th>
+            <th scope="col">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of pacientes">
+            <td>{{ p.id }}</td>
+            <td>{{ p.dni }}</td>
+            <td>{{ p.nombres }}</td>
+            <td>{{ p.apellidos }}</td>
+            <td>{{ p.telefono || 'Sin registrar' }}</td>
+            <td>
+              <span class="status-badge"
+                    [ngClass]="{
+                      'activo': p.estado === 'ACTIVO',
+                      'inactivo': p.estado === 'INACTIVO'
+                    }">{{ p.estado }}</span>
+            </td>
+            <td>
+              <div class="actions" *ngIf="p.id != null">
+                <button type="button" (click)="verDetalle(p.id!)" class="btn-view"
+                        title="Ver detalle" aria-label="Ver detalle del paciente">
+                  <i class="bi bi-eye-fill" aria-hidden="true"></i>
+                </button>
+                <button type="button" (click)="editar(p.id!)" class="btn-edit"
+                        [disabled]="eliminando"
+                        title="Editar" aria-label="Editar paciente">
+                  <i class="bi bi-pencil-fill" aria-hidden="true"></i>
+                </button>
+                <button *ngIf="esAdmin" type="button"
+                        (click)="eliminar(p.id!)" class="btn-delete"
+                        [disabled]="eliminando"
+                        title="Eliminar" aria-label="Eliminar paciente">
+                  <i class="bi bi-trash-fill" aria-hidden="true"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="!pacientes.length && !error">
+            <td colspan="7">No hay pacientes registrados.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
-
 </div>

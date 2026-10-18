@@ -4,19 +4,22 @@
       <div>
         <h2>
           <i class="bi bi-person-vcard-fill" aria-hidden="true"></i>
-          Gestión de Médicos
+          {{ esAdmin ? 'Gestión de Médicos' : 'Consulta de Médicos' }}
         </h2>
-        <p>Administración de médicos registrados</p>
+        <p>{{ esAdmin ? 'Administración de médicos registrados'
+                      : 'Consulta las fichas, especialidades y horarios médicos' }}</p>
       </div>
-      <button type="button" class="btn btn-primary" routerLink="/doctors/new">
-        <i class="bi bi-plus-circle" aria-hidden="true"></i>
-        Nuevo Médico
+
+      <button *ngIf="esAdmin" type="button" class="btn btn-primary"
+              routerLink="/doctors/new">
+        <i class="bi bi-plus-circle" aria-hidden="true"></i> Nuevo Médico
       </button>
     </div>
 
     <p *ngIf="loading" role="status">Cargando médicos...</p>
+    <p *ngIf="error" class="alert alert-danger" role="alert">{{ error }}</p>
 
-    <div class="table-responsive">
+    <div class="table-responsive" *ngIf="!loading">
       <table class="table align-middle">
         <thead>
           <tr>
@@ -37,7 +40,7 @@
             <td>
               <div class="doctor-cell">
                 <div class="avatar" aria-hidden="true">
-                  {{ m.nombres.charAt(0) }}
+                  {{ (m.nombres || 'M').charAt(0) }}
                 </div>
                 <strong>{{ m.nombres }} {{ m.apellidos }}</strong>
               </div>
@@ -52,29 +55,32 @@
                     [ngClass]="{
                       'badge-active': m.estado === 'ACTIVO',
                       'badge-inactive': m.estado !== 'ACTIVO'
-                    }">
-                {{ m.estado }}
-              </span>
+                    }">{{ m.estado }}</span>
             </td>
             <td>
-              <div class="actions">
+              <div class="actions" *ngIf="m.id != null">
                 <button type="button" class="btn btn-info btn-action"
                         (click)="verDetalle(m.id!)"
                         title="Ver detalle" aria-label="Ver detalle del médico">
                   <i class="bi bi-eye" aria-hidden="true"></i>
                 </button>
-                <button type="button" class="btn btn-warning btn-action"
-                        (click)="editar(m.id!)"
+                <button *ngIf="esAdmin" type="button"
+                        class="btn btn-warning btn-action"
+                        (click)="editar(m.id!)" [disabled]="eliminando"
                         title="Editar" aria-label="Editar médico">
                   <i class="bi bi-pencil" aria-hidden="true"></i>
                 </button>
-                <button type="button" class="btn btn-danger btn-action"
-                        (click)="eliminar(m.id!)"
+                <button *ngIf="esAdmin" type="button"
+                        class="btn btn-danger btn-action"
+                        (click)="eliminar(m.id!)" [disabled]="eliminando"
                         title="Eliminar" aria-label="Eliminar médico">
                   <i class="bi bi-trash" aria-hidden="true"></i>
                 </button>
               </div>
             </td>
+          </tr>
+          <tr *ngIf="!medicos.length && !error">
+            <td colspan="9" class="text-center">No hay médicos registrados.</td>
           </tr>
         </tbody>
       </table>

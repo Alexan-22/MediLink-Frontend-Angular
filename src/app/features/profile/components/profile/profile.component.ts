@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from '../../../../services/auth.service';
 import { PatientService } from '../../../../services/patient.service';
+import { DoctorService } from '../../../../services/doctor.service';
 import { Paciente } from '../../../../core/models/paciente.model';
+import { Medico } from '../../../../core/models/medico.model';
 
 type DatosPerfil = Omit<Paciente, 'id' | 'usuarioId' | 'estado' | 'fechaRegistro'>;
 
@@ -14,6 +15,7 @@ type DatosPerfil = Omit<Paciente, 'id' | 'usuarioId' | 'estado' | 'fechaRegistro
 })
 export class ProfileComponent implements OnInit {
   paciente: Paciente | null = null;
+  medico: Medico | null = null;
   cargando = false;
   guardando = false;
   sinPerfil = false;
@@ -22,16 +24,9 @@ export class ProfileComponent implements OnInit {
   hoy = this.fechaLocal();
 
   datos: DatosPerfil = {
-    dni: '',
-    nombres: '',
-    apellidos: '',
-    fechaNacimiento: '',
-    sexo: '',
-    telefono: '',
-    email: '',
-    direccion: '',
-    tipoSangre: '',
-    alergias: ''
+    dni: '', nombres: '', apellidos: '', fechaNacimiento: '',
+    sexo: '', telefono: '', email: '', direccion: '',
+    tipoSangre: '', alergias: ''
   };
 
   tiposSangre = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
@@ -39,47 +34,75 @@ export class ProfileComponent implements OnInit {
   constructor(
     public authService: AuthService,
     private patientService: PatientService,
-    private router: Router
+    private doctorService: DoctorService
   ) {}
 
+  get role(): string {
+    return this.authService.getRole() || '';
+  }
+
+  get username(): string {
+    return this.authService.getUsername() || 'Usuario';
+  }
+
   get esPaciente(): boolean {
-    return this.authService.getRole() === 'PACIENTE';
+    return this.role === 'PACIENTE';
+  }
+
+  get esMedico(): boolean {
+    return this.role === 'MEDICO';
+  }
+
+  get nombreRol(): string {
+    const nombres: Record<string, string> = {
+      ADMIN: 'Administrador',
+      MEDICO: 'Médico',
+      PACIENTE: 'Paciente',
+      RECEPCIONISTA: 'Recepcionista',
+      ENFERMERA: 'Enfermera'
+    };
+    return nombres[this.role] || 'Usuario';
   }
 
   ngOnInit(): void {
-    if (this.esPaciente) this.cargarPerfil();
+    this.cargarPerfil();
   }
 
   cargarPerfil(): void {
     if (this.cargando || this.guardando) return;
+    if (!this.esPaciente && !this.esMedico) return;
 
     this.cargando = true;
     this.sinPerfil = false;
     this.errorMessage = '';
+    this.successMessage = '';
+    this.paciente = null;
+    this.medico = null;
+
+    if (this.esMedico) {
+      this.doctorService.miPerfil().subscribe({
+        next: medico => {
+          this.medico = medico;
+          this.cargando = false;
+          if (!medico) this.errorMessage = 'No se encontró tu ficha médica.';
+        },
+        error: (err: HttpErrorResponse) => this.manejarErrorCarga(err)
+      });
+      return;
+    }
 
     this.patientService.miPerfil().subscribe({
       next: paciente => {
         this.paciente = paciente;
         this.cargando = false;
+        if (!paciente) this.errorMessage = 'No se encontró tu ficha de paciente.';
       },
-      error: (err: HttpErrorResponse) => {
-        this.cargando = false;
-
-        if (err.status === 404) {
-          this.paciente = null;
-          this.sinPerfil = true;
-          return;
-        }
-
-        this.errorMessage = this.obtenerError(
-          err, 'No se pudo cargar tu perfil. Intenta nuevamente.'
-        );
-      }
+      error: (err: HttpErrorResponse) => this.manejarErrorCarga(err)
     });
   }
 
   guardar(): void {
-    if (!this.esPaciente || !this.sinPerfil || this.guardando) return;
+    if (!this.esPaciente || !this.sinPerfil || this.guardando || this.cargando) return;
 
     this.errorMessage = '';
     this.successMessage = '';
@@ -134,7 +157,7 @@ export class ProfileComponent implements OnInit {
         this.paciente = paciente;
         this.sinPerfil = false;
         this.guardando = false;
-        this.successMessage = 'Tu ficha de paciente se creó y vinculó correctamente.';
+        this.successMessage = 'Tu ficha se creó y vinculó correctamente.';
       },
       error: (err: HttpErrorResponse) => {
         this.guardando = false;
@@ -145,10 +168,17 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  logout(): void {
-    if (this.guardando) return;
-    this.authService.logout();
-    this.router.navigate(['/auth/login']);
+  private manejarErrorCarga(err: HttpErrorResponse): void {
+    this.cargando = false;
+
+    if (err.status === 404) {
+      this.sinPerfil = true;
+      return;
+    }
+
+    this.errorMessage = this.obtenerError(
+      err, 'No se pudo cargar tu perfil. Intenta nuevamente.'
+    );
   }
 
   private obtenerError(err: HttpErrorResponse, texto: string): string {

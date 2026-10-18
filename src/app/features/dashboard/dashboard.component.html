@@ -1,12 +1,15 @@
 <div class="dashboard">
   <header class="dashboard-header">
-    <h1>{{ role === 'PACIENTE' ? 'Mi perfil' : 'Panel de Control' }}</h1>
+    <h1>{{ role === 'PACIENTE' ? 'Mi perfil'
+          : role === 'MEDICO' ? 'Mi panel médico' : 'Panel de Control' }}</h1>
     <p>{{ role === 'PACIENTE'
-      ? 'Consulta tus datos personales registrados en MediLink.'
-      : 'Resumen general del sistema MediLink' }}</p>
+          ? 'Consulta tus datos personales registrados en MediLink.'
+          : role === 'MEDICO'
+          ? 'Resumen de las citas asignadas a tu ficha médica.'
+          : 'Resumen general del sistema MediLink' }}</p>
   </header>
 
-  <!-- Perfil del paciente -->
+  <!-- Paciente -->
   <section *ngIf="role === 'PACIENTE'; else panelPersonal">
     <div class="profile-message" *ngIf="cargandoPerfil" role="status">
       Cargando tu perfil...
@@ -14,7 +17,10 @@
 
     <div class="profile-message profile-error" *ngIf="errorPerfil" role="alert">
       <p>{{ errorPerfil }}</p>
-      <button type="button" class="btn btn-outline-primary"
+      <a *ngIf="sinPerfil" class="btn btn-primary" routerLink="/profile">
+        Completar mis datos
+      </a>
+      <button *ngIf="!sinPerfil" type="button" class="btn btn-outline-primary"
               (click)="cargarPerfil()" [disabled]="cargandoPerfil">
         Reintentar
       </button>
@@ -38,14 +44,12 @@
         <div>
           <dt>Fecha de nacimiento</dt>
           <dd>{{ p.fechaNacimiento
-            ? (p.fechaNacimiento | date:'dd/MM/yyyy')
-            : 'No registrada' }}</dd>
+            ? (p.fechaNacimiento | date:'dd/MM/yyyy') : 'No registrada' }}</dd>
         </div>
         <div>
           <dt>Sexo</dt>
           <dd>{{ p.sexo === 'M' ? 'Masculino'
-            : p.sexo === 'F' ? 'Femenino'
-            : (p.sexo || 'No registrado') }}</dd>
+            : p.sexo === 'F' ? 'Femenino' : (p.sexo || 'No registrado') }}</dd>
         </div>
         <div><dt>Teléfono</dt><dd>{{ p.telefono || 'No registrado' }}</dd></div>
         <div><dt>Correo electrónico</dt><dd>{{ p.email || 'No registrado' }}</dd></div>
@@ -61,81 +65,114 @@
     </article>
   </section>
 
-  <!-- Panel de los demás roles -->
+  <!-- Personal -->
   <ng-template #panelPersonal>
     <div class="user-role">
-      <span>Bienvenido <strong>{{ role }}</strong></span>
+      <span>Bienvenido <strong>{{ role === 'MEDICO' ? 'Médico' : role }}</strong></span>
     </div>
 
-    <div class="stats-grid">
-      <div *ngIf="role === 'ADMIN' || role === 'RECEPCIONISTA'" class="stat-card">
+    <!-- Resumen propio del médico -->
+    <section *ngIf="role === 'MEDICO'" class="doctor-summary">
+      <div class="summary-toolbar">
+        <a class="btn btn-primary" routerLink="/appointments">
+          <i class="bi bi-calendar-check" aria-hidden="true"></i> Ver mis citas
+        </a>
+        <button type="button" class="btn btn-outline-primary"
+                (click)="cargarResumenMedico()" [disabled]="cargandoCitas">
+          <i class="bi bi-arrow-clockwise" aria-hidden="true"></i> Actualizar
+        </button>
+      </div>
+
+      <p class="profile-message" *ngIf="cargandoCitas" role="status">
+        Cargando tus citas...
+      </p>
+      <p class="profile-message profile-error" *ngIf="errorCitas" role="alert">
+        {{ errorCitas }}
+      </p>
+
+      <div class="stats-grid" *ngIf="citasMedicoCargadas">
+        <div class="stat-card">
+          <div class="card-header">
+            <i class="bi bi-calendar-check-fill" aria-hidden="true"></i>
+            <span>Total de mis citas</span>
+          </div>
+          <div class="card-number">{{ totalCitasMedico }}</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Totales generales -->
+    <div class="stats-grid" *ngIf="role === 'ADMIN' || role === 'RECEPCIONISTA'">
+      <div class="stat-card">
         <div class="card-header">
-          <i class="bi bi-people-fill"></i><span>Pacientes</span>
+          <i class="bi bi-people-fill" aria-hidden="true"></i><span>Pacientes</span>
         </div>
         <div class="card-number">{{ general.totalPacientes }}</div>
       </div>
 
-      <div *ngIf="role === 'ADMIN' || role === 'RECEPCIONISTA'" class="stat-card">
+      <div class="stat-card">
         <div class="card-header">
-          <i class="bi bi-heart-pulse-fill"></i><span>Médicos</span>
+          <i class="bi bi-heart-pulse-fill" aria-hidden="true"></i><span>Médicos</span>
         </div>
         <div class="card-number">{{ general.totalMedicos }}</div>
       </div>
 
-      <div *ngIf="role === 'ADMIN' || role === 'RECEPCIONISTA'" class="stat-card">
+      <div class="stat-card">
         <div class="card-header">
-          <i class="bi bi-calendar-check-fill"></i><span>Citas</span>
+          <i class="bi bi-calendar-check-fill" aria-hidden="true"></i><span>Citas</span>
         </div>
         <div class="card-number">{{ general.totalCitas }}</div>
       </div>
 
       <div *ngIf="role === 'ADMIN'" class="stat-card">
         <div class="card-header">
-          <i class="bi bi-bell-fill"></i><span>Notificaciones</span>
+          <i class="bi bi-bell-fill" aria-hidden="true"></i><span>Notificaciones</span>
         </div>
         <div class="card-number">{{ general.totalNotificaciones }}</div>
       </div>
     </div>
 
-    <div class="activity-grid">
-      <div *ngIf="role === 'ADMIN' || role === 'RECEPCIONISTA' || role === 'ENFERMERA'"
-           class="stat-card">
+    <div class="activity-grid"
+         *ngIf="role === 'ADMIN' || role === 'RECEPCIONISTA' || role === 'ENFERMERA'">
+      <div class="stat-card">
         <div class="card-header">
-          <i class="bi bi-person-check-fill"></i><span>Pacientes Activos</span>
+          <i class="bi bi-person-check-fill" aria-hidden="true"></i>
+          <span>Pacientes Activos</span>
         </div>
         <div class="card-number">{{ activos.pacientesActivos }}</div>
       </div>
 
       <div *ngIf="role === 'ADMIN'" class="stat-card">
         <div class="card-header">
-          <i class="bi bi-hospital-fill"></i><span>Médicos Activos</span>
+          <i class="bi bi-hospital-fill" aria-hidden="true"></i>
+          <span>Médicos Activos</span>
         </div>
         <div class="card-number">{{ activos.medicosActivos }}</div>
       </div>
     </div>
 
-    <div class="estado-card"
-         *ngIf="role === 'ADMIN' || role === 'MEDICO' || role === 'ENFERMERA'">
-      <h3>Estado de Citas</h3>
+    <section class="estado-card"
+             *ngIf="role === 'ADMIN' || role === 'ENFERMERA'
+                    || (role === 'MEDICO' && citasMedicoCargadas)">
+      <h3>{{ role === 'MEDICO' ? 'Estado de mis citas' : 'Estado de Citas' }}</h3>
       <div class="estado-grid">
         <div class="estado-item">
-          <i class="bi bi-calendar-event"></i><span>Programadas</span>
-          <strong>{{ estadoCitas.programadas }}</strong>
+          <i class="bi bi-calendar-event" aria-hidden="true"></i>
+          <span>Programadas</span><strong>{{ estadoCitas.programadas }}</strong>
         </div>
         <div class="estado-item">
-          <i class="bi bi-check-circle-fill"></i><span>Atendidas</span>
-          <strong>{{ estadoCitas.atendidas }}</strong>
+          <i class="bi bi-check-circle-fill" aria-hidden="true"></i>
+          <span>Atendidas</span><strong>{{ estadoCitas.atendidas }}</strong>
         </div>
         <div class="estado-item">
-          <i class="bi bi-x-circle-fill"></i><span>Canceladas</span>
-          <strong>{{ estadoCitas.canceladas }}</strong>
+          <i class="bi bi-x-circle-fill" aria-hidden="true"></i>
+          <span>Canceladas</span><strong>{{ estadoCitas.canceladas }}</strong>
         </div>
         <div class="estado-item">
-          <i class="bi bi-person-x-fill"></i><span>No Asistió</span>
-          <strong>{{ estadoCitas.noAsistio }}</strong>
+          <i class="bi bi-person-x-fill" aria-hidden="true"></i>
+          <span>No asistió</span><strong>{{ estadoCitas.noAsistio }}</strong>
         </div>
       </div>
-    </div>
+    </section>
   </ng-template>
 </div>
-

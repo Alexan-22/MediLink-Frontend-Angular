@@ -1,9 +1,9 @@
-:host { display: block; color: #1e293b; }
+:host { display: block; min-width: 0; color: #1e293b; }
 
 .profile-page {
   max-width: 1050px;
   margin: 0 auto;
-  padding: 30px;
+  padding: 28px;
 }
 
 .page-header {
@@ -14,9 +14,16 @@
   gap: 18px;
   margin-bottom: 24px;
 
-  h2 { margin: 0 0 8px; font-size: 28px; font-weight: 700; }
-  h2 i { color: #2563eb; margin-right: 8px; }
-  p { margin: 0; color: #64748b; }
+  h2 { margin: 6px 0 8px; font-size: 28px; font-weight: 750; }
+  p { margin: 0; color: #64748b; line-height: 1.6; }
+}
+
+.eyebrow {
+  display: block;
+  color: #2563eb;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.3px;
 }
 
 .profile-card {
@@ -25,45 +32,81 @@
   border: 1px solid #e2e8f0;
   border-radius: 18px;
   background: #fff;
-  box-shadow: 0 5px 20px rgba(15, 23, 42, .05);
+  box-shadow: 0 5px 20px rgba(15, 23, 42, .04);
 }
 
 .account-card {
   display: flex;
   align-items: center;
   gap: 18px;
+  border-color: #dbeafe;
+  background: linear-gradient(110deg, #eff6ff, #fff 75%);
 
-  h3 { margin: 0 0 8px; overflow-wrap: anywhere; }
+  h3 { margin: 5px 0 10px; font-size: 22px; overflow-wrap: anywhere; }
+
+  &.account-admin {
+    border-color: #e9d5ff;
+    background: linear-gradient(110deg, #f5f3ff, #fff 75%);
+    .avatar, .role { background: #ede9fe; color: #6d28d9; }
+    .account-symbol { color: #8b5cf6; }
+  }
+
+  &.account-patient {
+    border-color: #bbf7d0;
+    background: linear-gradient(110deg, #f0fdf4, #fff 75%);
+    .avatar, .role { background: #dcfce7; color: #166534; }
+    .account-symbol { color: #16a34a; }
+  }
 }
+
+.account-info { flex: 1; min-width: 0; }
+.account-caption { color: #64748b; font-size: 12px; }
 
 .avatar {
   display: grid;
   place-items: center;
   flex-shrink: 0;
-  width: 62px;
-  height: 62px;
-  border-radius: 16px;
+  width: 68px;
+  height: 68px;
+  border-radius: 20px;
   background: #dbeafe;
   color: #1d4ed8;
-  font-size: 26px;
-  font-weight: 700;
+  font-size: 28px;
+  font-weight: 800;
 }
 
-.role {
+.account-symbol {
+  flex-shrink: 0;
+  color: #2563eb;
+  font-size: 45px;
+  opacity: .65;
+}
+
+.role, .status {
   display: inline-block;
-  padding: 5px 12px;
+  padding: 6px 12px;
   border-radius: 20px;
-  background: #eff6ff;
-  color: #1d4ed8;
   font-size: 12px;
   font-weight: 700;
 }
 
+.role { background: #dbeafe; color: #1d4ed8; }
+.status { background: #dcfce7; color: #166534; }
+.status.inactive { background: #fee2e2; color: #991b1b; }
+
 .section-heading {
   margin-bottom: 24px;
 
-  h3 { margin: 0 0 8px; font-size: 21px; }
+  h3 { margin: 6px 0 8px; font-size: 21px; overflow-wrap: anywhere; }
   p { margin: 0; color: #64748b; line-height: 1.5; }
+}
+
+.detail-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 16px;
 }
 
 fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
@@ -71,7 +114,7 @@ fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
 .form-grid, .details-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 20px;
+  gap: 18px;
 }
 
 .form-group {
@@ -106,15 +149,53 @@ input, select, textarea {
 textarea { resize: vertical; }
 .full-width { grid-column: 1 / -1; }
 
+.details-grid {
+  margin: 0;
+
+  > div {
+    min-width: 0;
+    padding: 16px;
+    border: 1px solid #edf2f7;
+    border-radius: 12px;
+    background: #f8fafc;
+  }
+
+  dt { margin-bottom: 7px; color: #64748b; font-size: 12px; }
+  dd {
+    margin: 0;
+    color: #1e293b;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+  }
+}
+
+.profile-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  margin: 22px 0 0;
+  padding: 14px;
+  border-radius: 10px;
+  background: #eff6ff;
+  color: #475569;
+  font-size: 13px;
+  line-height: 1.6;
+
+  i { color: #2563eb; }
+}
+
 .form-actions {
   display: flex;
   justify-content: flex-end;
   align-items: center;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 12px;
   margin-top: 24px;
 
-  span { margin-right: auto; color: #64748b; font-size: 13px; }
+  > span { margin-right: auto; color: #64748b; font-size: 13px; }
 }
 
 .button {
@@ -122,10 +203,13 @@ textarea { resize: vertical; }
   align-items: center;
   justify-content: center;
   gap: 8px;
+  min-height: 44px;
   padding: 12px 18px;
+  box-sizing: border-box;
   border: 1px solid transparent;
   border-radius: 10px;
   font: inherit;
+  font-size: 14px;
   font-weight: 600;
   text-decoration: none;
   cursor: pointer;
@@ -140,35 +224,42 @@ textarea { resize: vertical; }
   &:hover:not(:disabled) { background: #1d4ed8; }
 }
 
-.secondary { background: #e2e8f0; color: #334155; }
-.danger {
-  background: #dc2626;
-  color: #fff;
-  &:hover:not(:disabled) { background: #b91c1c; }
+.secondary {
+  border-color: #e2e8f0;
+  background: #fff;
+  color: #475569;
+  &:hover:not(:disabled) { background: #f1f5f9; }
 }
 
 .message {
-  padding: 14px 18px;
-  border-radius: 10px;
-  line-height: 1.5;
+  padding: 16px 18px;
+  border-radius: 12px;
+  line-height: 1.6;
+
+  p { margin: 0 0 12px; }
 }
 
 .success { background: #dcfce7; color: #166534; }
 .error { background: #fee2e2; color: #991b1b; }
 .loading { color: #64748b; padding: 16px 0; }
 
-.details-grid {
-  margin: 0;
+.empty-profile {
+  padding: 40px 24px;
+  text-align: center;
 
-  div { padding: 14px; border-radius: 10px; background: #f8fafc; }
-  dt { margin-bottom: 6px; color: #64748b; font-size: 13px; }
-  dd { margin: 0; font-weight: 600; overflow-wrap: anywhere; white-space: pre-wrap; }
+  > i { color: #2563eb; font-size: 40px; }
+  h3 { margin: 16px 0 10px; font-size: 20px; }
+  p { margin: 0; color: #64748b; line-height: 1.6; }
 }
 
 @media (max-width: 650px) {
-  .profile-page { padding: 18px 12px; }
+  .profile-page { padding: 16px 8px; }
   .profile-card { padding: 20px; }
   .form-grid, .details-grid { grid-template-columns: 1fr; }
   .page-header h2 { font-size: 24px; }
+  .account-card { gap: 12px; }
+  .account-card h3 { font-size: 18px; }
+  .avatar { width: 54px; height: 54px; border-radius: 16px; }
+  .account-symbol { display: none; }
   .form-actions .button { width: 100%; }
 }

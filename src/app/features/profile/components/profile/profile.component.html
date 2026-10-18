@@ -1,147 +1,242 @@
 <section class="profile-page">
   <header class="page-header">
     <div>
-      <h2><i class="bi bi-person-circle" aria-hidden="true"></i> Mi perfil</h2>
-      <p>Consulta tu cuenta y tus datos personales en MediLink.</p>
+      <span class="eyebrow">MI CUENTA · MEDILINK</span>
+      <h2>Mi perfil</h2>
+      <p>Consulta tu información de cuenta{{ esMedico ? ' y tu ficha médica.' : '.' }}</p>
     </div>
-    <button type="button" class="button danger" (click)="logout()" [disabled]="guardando">
-      <i class="bi bi-box-arrow-right" aria-hidden="true"></i> Cerrar sesión
+    <button *ngIf="esPaciente || esMedico" type="button" class="button secondary"
+            (click)="cargarPerfil()" [disabled]="cargando || guardando">
+      <i class="bi bi-arrow-clockwise" aria-hidden="true"></i>
+      Actualizar
     </button>
   </header>
 
-  <section class="profile-card account-card" aria-label="Datos de la cuenta">
+  <!-- Cuenta compartida -->
+  <section class="profile-card account-card" aria-label="Datos de la cuenta"
+           [class.account-admin]="role === 'ADMIN'"
+           [class.account-patient]="esPaciente">
     <span class="avatar" aria-hidden="true">
-      {{ (authService.getUsername() || 'U').slice(0, 1).toUpperCase() }}
+      {{ username.slice(0, 1).toUpperCase() }}
     </span>
-    <div>
-      <h3>{{ authService.getUsername() }}</h3>
-      <span class="role">{{ authService.getRole() }}</span>
+    <div class="account-info">
+      <span class="account-caption">Usuario de acceso</span>
+      <h3>{{ username }}</h3>
+      <span class="role">{{ nombreRol }}</span>
+    </div>
+    <span class="account-symbol" aria-hidden="true">
+      <i class="bi" [ngClass]="{
+        'bi-shield-lock': role === 'ADMIN',
+        'bi-heart-pulse': esMedico,
+        'bi-person-check': !esMedico && role !== 'ADMIN'
+      }"></i>
+    </span>
+  </section>
+
+  <p class="message success" *ngIf="successMessage" role="status">{{ successMessage }}</p>
+  <div class="message error" *ngIf="errorMessage" role="alert">
+    <p>{{ errorMessage }}</p>
+    <button *ngIf="!sinPerfil && (esPaciente || esMedico)" type="button"
+            class="button secondary" (click)="cargarPerfil()"
+            [disabled]="cargando || guardando">
+      Volver a intentar
+    </button>
+  </div>
+  <p class="loading" *ngIf="cargando" role="status">Cargando tus datos...</p>
+
+  <!-- Administrador, recepción y enfermería -->
+  <section class="profile-card" *ngIf="!esPaciente && !esMedico">
+    <div class="section-heading">
+      <h3>Información de la cuenta</h3>
+      <p>Estos son los datos disponibles para tu cuenta en MediLink.</p>
+    </div>
+
+    <dl class="details-grid">
+      <div><dt>Nombre de usuario</dt><dd>{{ username }}</dd></div>
+      <div><dt>Rol asignado</dt><dd>{{ nombreRol }}</dd></div>
+    </dl>
+
+    <p class="profile-note">
+      <i class="bi bi-info-circle" aria-hidden="true"></i>
+      El nombre de usuario identifica tu acceso al sistema.
+    </p>
+
+    <div class="form-actions">
+      <a class="button secondary" routerLink="/dashboard">Ir al Dashboard</a>
+      <a *ngIf="role === 'ADMIN'" class="button primary" routerLink="/users">
+        <i class="bi bi-people" aria-hidden="true"></i> Administrar usuarios
+      </a>
     </div>
   </section>
 
-  <p class="message success" *ngIf="successMessage" role="status">
-    {{ successMessage }}
-  </p>
-  <p class="message error" *ngIf="errorMessage" role="alert">
-    {{ errorMessage }}
-  </p>
+  <!-- Médico sin vinculación -->
+  <section class="profile-card empty-profile" *ngIf="esMedico && !cargando && sinPerfil">
+    <i class="bi bi-person-vcard" aria-hidden="true"></i>
+    <h3>Tu ficha médica aún no está vinculada</h3>
+    <p>Solicita al administrador que vincule tu cuenta con tu registro de médico.</p>
+  </section>
 
-  <ng-container *ngIf="esPaciente">
-    <p class="loading" *ngIf="cargando" role="status">Cargando tus datos...</p>
-
-    <button *ngIf="!cargando && !paciente && !sinPerfil"
-            type="button" class="button secondary" (click)="cargarPerfil()">
-      Volver a intentar
-    </button>
-
-    <section class="profile-card" *ngIf="!cargando && sinPerfil">
-      <div class="section-heading">
-        <h3>Completa tus datos de paciente</h3>
-        <p>Estos datos se vincularán automáticamente con tu cuenta.</p>
-      </div>
-
-      <form #perfilForm="ngForm" (ngSubmit)="guardar()">
-        <fieldset [disabled]="guardando">
-          <div class="form-grid">
-            <div class="form-group">
-              <label for="dni">DNI *</label>
-              <input id="dni" name="dni" [(ngModel)]="datos.dni"
-                     inputmode="numeric" pattern="[0-9]{8}" maxlength="8"
-                     placeholder="8 dígitos" required>
-            </div>
-
-            <div class="form-group">
-              <label for="fechaNacimiento">Fecha de nacimiento *</label>
-              <input id="fechaNacimiento" type="date" name="fechaNacimiento"
-                     [(ngModel)]="datos.fechaNacimiento" [max]="hoy" required>
-            </div>
-
-            <div class="form-group">
-              <label for="nombres">Nombres *</label>
-              <input id="nombres" name="nombres" [(ngModel)]="datos.nombres"
-                     autocomplete="given-name" required>
-            </div>
-
-            <div class="form-group">
-              <label for="apellidos">Apellidos *</label>
-              <input id="apellidos" name="apellidos" [(ngModel)]="datos.apellidos"
-                     autocomplete="family-name" required>
-            </div>
-
-            <div class="form-group">
-              <label for="sexo">Sexo *</label>
-              <select id="sexo" name="sexo" [(ngModel)]="datos.sexo" required>
-                <option value="" disabled>Selecciona una opción</option>
-                <option value="M">Masculino</option>
-                <option value="F">Femenino</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label for="telefono">Teléfono</label>
-              <input id="telefono" type="tel" name="telefono"
-                     [(ngModel)]="datos.telefono" inputmode="numeric"
-                     pattern="[0-9]{9}" maxlength="9" autocomplete="tel"
-                     placeholder="9 dígitos">
-            </div>
-
-            <div class="form-group">
-              <label for="email">Correo electrónico</label>
-              <input id="email" type="email" name="email" [(ngModel)]="datos.email"
-                     autocomplete="email" email>
-            </div>
-
-            <div class="form-group">
-              <label for="tipoSangre">Tipo de sangre</label>
-              <select id="tipoSangre" name="tipoSangre" [(ngModel)]="datos.tipoSangre">
-                <option value="">No lo sé</option>
-                <option *ngFor="let tipo of tiposSangre" [value]="tipo">{{ tipo }}</option>
-              </select>
-            </div>
-
-            <div class="form-group full-width">
-              <label for="direccion">Dirección</label>
-              <input id="direccion" name="direccion" [(ngModel)]="datos.direccion"
-                     autocomplete="street-address">
-            </div>
-
-            <div class="form-group full-width">
-              <label for="alergias">Alergias</label>
-              <textarea id="alergias" name="alergias" [(ngModel)]="datos.alergias"
-                        rows="3" placeholder="Indica tus alergias conocidas, si corresponde"></textarea>
-            </div>
-          </div>
-
-          <div class="form-actions">
-            <span>* Campos obligatorios</span>
-            <button type="submit" class="button primary"
-                    [disabled]="perfilForm.invalid || guardando">
-              <i class="bi bi-save" aria-hidden="true"></i>
-              {{ guardando ? 'Guardando...' : 'Guardar mis datos' }}
-            </button>
-          </div>
-        </fieldset>
-      </form>
-    </section>
-
-    <section class="profile-card" *ngIf="!cargando && paciente as p">
-      <div class="section-heading">
-        <h3>Mi ficha de paciente</h3>
-        <p>Tu cuenta está vinculada con esta ficha.</p>
-      </div>
+  <!-- Ficha del médico -->
+  <ng-container *ngIf="esMedico && !cargando">
+    <section class="profile-card" *ngIf="medico as m">
+      <header class="section-heading detail-heading">
+        <div>
+          <span class="eyebrow">FICHA MÉDICA</span>
+          <h3>Dr. {{ m.nombres }} {{ m.apellidos }}</h3>
+          <p>{{ m.especialidad || 'Especialidad sin registrar' }}</p>
+        </div>
+        <span class="status" [class.inactive]="m.estado !== 'ACTIVO'">{{ m.estado }}</span>
+      </header>
 
       <dl class="details-grid">
-        <div><dt>Nombres</dt><dd>{{ p.nombres }} {{ p.apellidos }}</dd></div>
+        <div><dt>CMP</dt><dd>{{ m.cmp }}</dd></div>
+        <div><dt>Especialidad</dt><dd>{{ m.especialidad || 'Sin registrar' }}</dd></div>
+        <div><dt>Teléfono</dt><dd>{{ m.telefono || 'Sin registrar' }}</dd></div>
+        <div><dt>Correo electrónico</dt><dd>{{ m.email || 'Sin registrar' }}</dd></div>
+        <div><dt>Consultorio</dt><dd>{{ m.consultorio || 'Sin registrar' }}</dd></div>
+        <div>
+          <dt>Horario de atención</dt>
+          <dd>{{ m.horarioInicio ? (m.horarioInicio | slice:0:5) : 'Sin registrar' }}
+            – {{ m.horarioFin ? (m.horarioFin | slice:0:5) : 'Sin registrar' }}</dd>
+        </div>
+      </dl>
+
+      <p class="profile-note">
+        <i class="bi bi-info-circle" aria-hidden="true"></i>
+        Para corregir tu ficha médica, comunícate con administración.
+      </p>
+
+      <div class="form-actions">
+        <a class="button primary" routerLink="/appointments">
+          <i class="bi bi-calendar-check" aria-hidden="true"></i> Ver mis citas
+        </a>
+      </div>
+    </section>
+  </ng-container>
+
+  <!-- Formulario del paciente -->
+  <section class="profile-card" *ngIf="esPaciente && !cargando && sinPerfil">
+    <div class="section-heading">
+      <h3>Completa tus datos de paciente</h3>
+      <p>Estos datos se vincularán automáticamente con tu cuenta.</p>
+    </div>
+
+    <form #perfilForm="ngForm" (ngSubmit)="guardar()">
+      <fieldset [disabled]="guardando">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="dni">DNI *</label>
+            <input id="dni" name="dni" [(ngModel)]="datos.dni" inputmode="numeric"
+                   pattern="[0-9]{8}" maxlength="8" placeholder="8 dígitos" required>
+          </div>
+
+          <div class="form-group">
+            <label for="fechaNacimiento">Fecha de nacimiento *</label>
+            <input id="fechaNacimiento" type="date" name="fechaNacimiento"
+                   [(ngModel)]="datos.fechaNacimiento" [max]="hoy" required>
+          </div>
+
+          <div class="form-group">
+            <label for="nombres">Nombres *</label>
+            <input id="nombres" name="nombres" [(ngModel)]="datos.nombres"
+                   autocomplete="given-name" required>
+          </div>
+
+          <div class="form-group">
+            <label for="apellidos">Apellidos *</label>
+            <input id="apellidos" name="apellidos" [(ngModel)]="datos.apellidos"
+                   autocomplete="family-name" required>
+          </div>
+
+          <div class="form-group">
+            <label for="sexo">Sexo *</label>
+            <select id="sexo" name="sexo" [(ngModel)]="datos.sexo" required>
+              <option value="" disabled>Selecciona una opción</option>
+              <option value="M">Masculino</option>
+              <option value="F">Femenino</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="telefono">Teléfono</label>
+            <input id="telefono" type="tel" name="telefono" [(ngModel)]="datos.telefono"
+                   inputmode="numeric" pattern="[0-9]{9}" maxlength="9"
+                   autocomplete="tel" placeholder="9 dígitos">
+          </div>
+
+          <div class="form-group">
+            <label for="email">Correo electrónico</label>
+            <input id="email" type="email" name="email" [(ngModel)]="datos.email"
+                   autocomplete="email" email>
+          </div>
+
+          <div class="form-group">
+            <label for="tipoSangre">Tipo de sangre</label>
+            <select id="tipoSangre" name="tipoSangre" [(ngModel)]="datos.tipoSangre">
+              <option value="">No lo sé</option>
+              <option *ngFor="let tipo of tiposSangre" [value]="tipo">{{ tipo }}</option>
+            </select>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="direccion">Dirección</label>
+            <input id="direccion" name="direccion" [(ngModel)]="datos.direccion"
+                   autocomplete="street-address">
+          </div>
+
+          <div class="form-group full-width">
+            <label for="alergias">Alergias</label>
+            <textarea id="alergias" name="alergias" [(ngModel)]="datos.alergias"
+                      rows="3" placeholder="Indica tus alergias conocidas, si corresponde"></textarea>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <span>* Campos obligatorios</span>
+          <button type="submit" class="button primary"
+                  [disabled]="perfilForm.invalid || guardando">
+            <i class="bi bi-save" aria-hidden="true"></i>
+            {{ guardando ? 'Guardando...' : 'Guardar mis datos' }}
+          </button>
+        </div>
+      </fieldset>
+    </form>
+  </section>
+
+  <!-- Ficha del paciente -->
+  <ng-container *ngIf="esPaciente && !cargando">
+    <section class="profile-card" *ngIf="paciente as p">
+      <header class="section-heading detail-heading">
+        <div>
+          <span class="eyebrow">FICHA DE PACIENTE</span>
+          <h3>{{ p.nombres }} {{ p.apellidos }}</h3>
+          <p>Tu información personal registrada.</p>
+        </div>
+        <span class="status" [class.inactive]="p.estado !== 'ACTIVO'">{{ p.estado }}</span>
+      </header>
+
+      <dl class="details-grid">
         <div><dt>DNI</dt><dd>{{ p.dni }}</dd></div>
-        <div><dt>Fecha de nacimiento</dt><dd>{{ p.fechaNacimiento | date:'dd/MM/yyyy' }}</dd></div>
-        <div><dt>Sexo</dt><dd>{{ p.sexo === 'M' ? 'Masculino' : p.sexo === 'F' ? 'Femenino' : p.sexo }}</dd></div>
+        <div>
+          <dt>Fecha de nacimiento</dt>
+          <dd>{{ p.fechaNacimiento ? (p.fechaNacimiento | date:'dd/MM/yyyy') : 'Sin registrar' }}</dd>
+        </div>
+        <div>
+          <dt>Sexo</dt>
+          <dd>{{ p.sexo === 'M' ? 'Masculino'
+            : p.sexo === 'F' ? 'Femenino' : (p.sexo || 'Sin registrar') }}</dd>
+        </div>
         <div><dt>Teléfono</dt><dd>{{ p.telefono || 'Sin registrar' }}</dd></div>
-        <div><dt>Correo</dt><dd>{{ p.email || 'Sin registrar' }}</dd></div>
+        <div><dt>Correo electrónico</dt><dd>{{ p.email || 'Sin registrar' }}</dd></div>
         <div><dt>Tipo de sangre</dt><dd>{{ p.tipoSangre || 'Sin registrar' }}</dd></div>
-        <div><dt>Estado</dt><dd>{{ p.estado }}</dd></div>
         <div class="full-width"><dt>Dirección</dt><dd>{{ p.direccion || 'Sin registrar' }}</dd></div>
         <div class="full-width"><dt>Alergias</dt><dd>{{ p.alergias || 'Sin registrar' }}</dd></div>
       </dl>
+
+      <p class="profile-note">
+        <i class="bi bi-info-circle" aria-hidden="true"></i>
+        Para corregir tus datos, comunícate con recepción.
+      </p>
 
       <div class="form-actions">
         <a class="button primary" routerLink="/appointments/me">
