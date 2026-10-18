@@ -1,16 +1,21 @@
-medicitas-frontend
+MediLink-Frontend-Angular
 ├── src
 │   ├── app
 │   │   ├── core
 │   │   │   ├── guards
 │   │   │   │   ├── auth.guard.ts
-│   │   │   │   └── no-auth.guard.ts
+│   │   │   │   ├── no-auth.guard.ts
+│   │   │   │   └── role.guard.ts
 │   │   │   ├── interceptors
-│   │   │   │   └── error.interceptor.ts
+│   │   │   │   ├── auth.interceptor.ts
+│   │   │   │   ├── error.interceptor.ts
+│   │   │   │   └── jwt.interceptor.ts
 │   │   │   ├── models
 │   │   │   │   ├── auth-response.model.ts
-│   │   │   │   ├── cita-detalle.dto.ts
+│   │   │   │   ├── change-password-request.model.ts
 │   │   │   │   ├── cita.model.ts
+│   │   │   │   ├── cita-detalle.dto.ts
+│   │   │   │   ├── historia-clinica.model.ts
 │   │   │   │   ├── login-request.model.ts
 │   │   │   │   ├── medico.model.ts
 │   │   │   │   ├── notificacion.model.ts
@@ -18,10 +23,35 @@ medicitas-frontend
 │   │   │   │   ├── register-request.model.ts
 │   │   │   │   ├── reporte-activos.dto.ts
 │   │   │   │   ├── reporte-citas-estado.dto.ts
-│   │   │   │   └── reporte-general.dto.ts
+│   │   │   │   ├── reporte-general.dto.ts
+│   │   │   │   ├── usuario.model.ts
+│   │   │   │   └── usuario-request.model.ts
 │   │   │   └── services
 │   │   │       └── token.service.ts
 │   │   ├── features
+│   │   │   ├── appointments
+│   │   │   │   ├── appointment-calendar
+│   │   │   │   │   ├── appointment-calendar.component.html
+│   │   │   │   │   ├── appointment-calendar.component.scss
+│   │   │   │   │   └── appointment-calendar.component.ts
+│   │   │   │   ├── appointment-detail
+│   │   │   │   │   ├── appointment-detail.component.html
+│   │   │   │   │   ├── appointment-detail.component.scss
+│   │   │   │   │   └── appointment-detail.component.ts
+│   │   │   │   ├── appointment-form
+│   │   │   │   │   ├── appointment-form.component.html
+│   │   │   │   │   ├── appointment-form.component.scss
+│   │   │   │   │   └── appointment-form.component.ts
+│   │   │   │   ├── appointment-list
+│   │   │   │   │   ├── appointment-list.component.html
+│   │   │   │   │   ├── appointment-list.component.scss
+│   │   │   │   │   └── appointment-list.component.ts
+│   │   │   │   ├── my-appointments
+│   │   │   │   │   ├── my-appointments.component.html
+│   │   │   │   │   ├── my-appointments.component.scss
+│   │   │   │   │   └── my-appointments.component.ts
+│   │   │   │   ├── appointments.module.ts
+│   │   │   │   └── appointments-routing.module.ts
 │   │   │   ├── auth
 │   │   │   │   ├── login
 │   │   │   │   │   ├── login.component.html
@@ -29,56 +59,148 @@ medicitas-frontend
 │   │   │   │   │   └── login.component.ts
 │   │   │   │   ├── register
 │   │   │   │   │   ├── register.component.html
+│   │   │   │   │   ├── register.component.scss
 │   │   │   │   │   └── register.component.ts
-│   │   │   │   ├── auth-routing.module.ts
-│   │   │   │   └── auth.module.ts
+│   │   │   │   ├── auth.module.ts
+│   │   │   │   └── auth-routing.module.ts
 │   │   │   ├── dashboard
-│   │   │   │   ├── dashboard-routing.module.ts
 │   │   │   │   ├── dashboard.component.html
+│   │   │   │   ├── dashboard.component.scss
 │   │   │   │   ├── dashboard.component.ts
-│   │   │   │   └── dashboard.module.ts
-│   │   │   └── patients
-│   │   │       ├── patient-form
-│   │   │       │   └── patient-form.component.ts
-│   │   │       ├── patient-list
-│   │   │       │   ├── patient-list.component.html
-│   │   │       │   └── patient-list.component.ts
-│   │   │       ├── patients-routing.module.ts
-│   │   │       └── patients.module.ts
+│   │   │   │   ├── dashboard.module.ts
+│   │   │   │   └── dashboard-routing.module.ts
+│   │   │   ├── doctors
+│   │   │   │   ├── doctor-detail
+│   │   │   │   │   ├── doctor-detail.component.html
+│   │   │   │   │   ├── doctor-detail.component.scss
+│   │   │   │   │   └── doctor-detail.component.ts
+│   │   │   │   ├── doctor-form
+│   │   │   │   │   ├── doctor-form.component.html
+│   │   │   │   │   ├── doctor-form.component.scss
+│   │   │   │   │   └── doctor-form.component.ts
+│   │   │   │   ├── doctor-list
+│   │   │   │   │   ├── doctor-list.component.html
+│   │   │   │   │   ├── doctor-list.component.scss
+│   │   │   │   │   └── doctor-list.component.ts
+│   │   │   │   ├── doctors.module.ts
+│   │   │   │   └── doctors-routing.module.ts
+│   │   │   ├── notifications
+│   │   │   │   ├── notification-list
+│   │   │   │   │   ├── notification-list.component.html
+│   │   │   │   │   ├── notification-list.component.scss
+│   │   │   │   │   └── notification-list.component.ts
+│   │   │   │   ├── notifications.module.ts
+│   │   │   │   └── notifications-routing.module.ts
+│   │   │   ├── patients
+│   │   │   │   ├── patient-detail
+│   │   │   │   │   ├── patient-detail.component.html
+│   │   │   │   │   ├── patient-detail.component.scss
+│   │   │   │   │   └── patient-detail.component.ts
+│   │   │   │   ├── patient-form
+│   │   │   │   │   ├── patient-form.component.html
+│   │   │   │   │   ├── patient-form.component.scss
+│   │   │   │   │   └── patient-form.component.ts
+│   │   │   │   ├── patient-list
+│   │   │   │   │   ├── patient-list.component.html
+│   │   │   │   │   ├── patient-list.component.scss
+│   │   │   │   │   └── patient-list.component.ts
+│   │   │   │   ├── patients.module.ts
+│   │   │   │   └── patients-routing.module.ts
+│   │   │   ├── profile
+│   │   │   │   ├── components
+│   │   │   │   │   └── profile
+│   │   │   │   │       ├── profile.component.html
+│   │   │   │   │       ├── profile.component.scss
+│   │   │   │   │       └── profile.component.ts
+│   │   │   │   ├── profile.module.ts
+│   │   │   │   └── profile-routing.module.ts
+│   │   │   ├── reports
+│   │   │   │   ├── appointments-report
+│   │   │   │   │   ├── appointments-report.component.html
+│   │   │   │   │   ├── appointments-report.component.scss
+│   │   │   │   │   └── appointments-report.component.ts
+│   │   │   │   ├── doctors-report
+│   │   │   │   │   ├── doctors-report.component.html
+│   │   │   │   │   ├── doctors-report.component.scss
+│   │   │   │   │   └── doctors-report.component.ts
+│   │   │   │   ├── general-report
+│   │   │   │   │   ├── general-report.component.html
+│   │   │   │   │   ├── general-report.component.scss
+│   │   │   │   │   └── general-report.component.ts
+│   │   │   │   ├── patients-report
+│   │   │   │   │   ├── patients-report.component.html
+│   │   │   │   │   ├── patients-report.component.scss
+│   │   │   │   │   └── patients-report.component.ts
+│   │   │   │   ├── reports.module.ts
+│   │   │   │   └── reports-routing.module.ts
+│   │   │   └── users
+│   │   │       ├── components
+│   │   │       │   ├── change-password
+│   │   │       │   │   ├── change-password.component.html
+│   │   │       │   │   ├── change-password.component.scss
+│   │   │       │   │   └── change-password.component.ts
+│   │   │       │   ├── user-form
+│   │   │       │   │   ├── user-form.component.html
+│   │   │       │   │   ├── user-form.component.scss
+│   │   │       │   │   └── user-form.component.ts
+│   │   │       │   └── users-list
+│   │   │       │       ├── users-list.component.html
+│   │   │       │       ├── users-list.component.scss
+│   │   │       │       └── users-list.component.ts
+│   │   │       ├── users.module.ts
+│   │   │       └── users-routing.module.ts
 │   │   ├── services
 │   │   │   ├── appointment.service.ts
 │   │   │   ├── auth.service.ts
 │   │   │   ├── doctor.service.ts
+│   │   │   ├── history.service.ts
+│   │   │   ├── loading.service.ts
 │   │   │   ├── notification.service.ts
 │   │   │   ├── patient.service.ts
-│   │   │   └── report.service.ts
+│   │   │   ├── report.service.ts
+│   │   │   ├── toast.service.ts
+│   │   │   └── user.service.ts
 │   │   ├── shared
-│   │   │   └── components
-│   │   │       ├── confirm-dialog
-│   │   │       │   └── confirm-dialog.component.ts
-│   │   │       ├── header
-│   │   │       │   ├── header.component.html
-│   │   │       │   ├── header.component.scss
-│   │   │       │   └── header.component.ts
-│   │   │       ├── loading-spinner
-│   │   │       │   └── loading-spinner.component.ts
-│   │   │       ├── sidebar
-│   │   │       │   ├── sidebar.component.html
-│   │   │       │   ├── sidebar.component.scss
-│   │   │       │   └── sidebar.component.ts
-│   │   │       └── toast-notifications
-│   │   │           └── toast-notifications.component.ts
-│   │   ├── app-routing.module.ts
+│   │   │   ├── components
+│   │   │   │   ├── confirm-dialog
+│   │   │   │   │   └── confirm-dialog.component.ts
+│   │   │   │   ├── header
+│   │   │   │   │   ├── header.component.html
+│   │   │   │   │   ├── header.component.scss
+│   │   │   │   │   └── header.component.ts
+│   │   │   │   ├── loading-spinner
+│   │   │   │   │   └── loading-spinner.component.ts
+│   │   │   │   ├── sidebar
+│   │   │   │   │   ├── sidebar.component.html
+│   │   │   │   │   ├── sidebar.component.scss
+│   │   │   │   │   └── sidebar.component.ts
+│   │   │   │   └── toast-notifications
+│   │   │   │       └── toast-notifications.component.ts
+│   │   │   ├── directives
+│   │   │   │   └── .gitkeep
+│   │   │   └── pipes
+│   │   │       └── .gitkeep
 │   │   ├── app.component.html
 │   │   ├── app.component.scss
 │   │   ├── app.component.ts
-│   │   └── app.module.ts
+│   │   ├── app.module.ts
+│   │   └── app-routing.module.ts
+│   ├── assets
+│   │   └── images
+│   │       └── medilink-logo.png
 │   ├── environments
 │   │   ├── environment.prod.ts
 │   │   └── environment.ts
+│   ├── favicon.ico
 │   ├── index.html
 │   ├── main.ts
 │   └── styles.scss
+├── .gitignore
 ├── angular.json
+├── arbol_directorios.txt
 ├── package.json
+├── package-lock.json
+├── parse_report.txt
+├── README.md
+├── tsconfig.app.json
 └── tsconfig.json
